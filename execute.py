@@ -92,9 +92,7 @@ class ANI1_force_and_energy(object):
         coords:simtk.unit.quantity.Quantity
         maxiter: int
             Maximum number of minimization steps performed.
-        lambda_value: float
-            indicate position in lambda protocoll to control how dummy atoms are handled
-            
+
         Returns
         -------
         coords:simtk.unit.quantity.Quantity
@@ -105,7 +103,7 @@ class ANI1_force_and_energy(object):
         x = coords.value_in_unit(unit.angstrom)
         self.memory_of_energy = []
         print("Begin minimizing...")
-        f = optimize.minimize(self._traget_energy_function, x, method='BFGS',
+        f = optimize.minimize(self._target_energy_function, x, method='BFGS',
                               jac=True, options={'maxiter': maxiter, 'disp': True})
 
         _logger.critical(f"Minimization status: {f.success}")
@@ -170,7 +168,7 @@ class ANI1_force_and_energy(object):
 
         return energy_in_hartree
 
-    def _traget_energy_function(self, x) -> float:
+    def _target_energy_function(self, x) -> float:
         """
         Given a coordinate set (x) the energy is calculated in kJ/mol.
         
