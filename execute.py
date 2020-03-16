@@ -3,9 +3,6 @@
 
 # ## Annealed Importance Sampling to exchange intramolecular talks between torchANI and openmm.
 
-# In[1]:
-
-
 import torchani
 import torch
 import mdtraj as md
@@ -29,8 +26,6 @@ logging.basicConfig(level=logging.NOTSET)
 _logger = logging.getLogger("interpolANI")
 _logger.setLevel(logging.DEBUG)
 
-
-# In[2]:
 
 
 class ANI1_force_and_energy(object):
@@ -220,9 +215,6 @@ class ANI1_force_and_energy(object):
         energy = energy_in_hartrees.item() * self.hartree_to_kJ_per_mole * unit.kilojoule_per_mole
         return energy
     
-
-
-# In[70]:
 
 
 class InterpolAIS(object):
@@ -652,10 +644,7 @@ class InterpolAIS(object):
         _logger.debug(f"incremental works: {incremental_works}")
             
         self.anneal_num += 1
-           
 
-
-# In[71]:
 
 
 def build_solvated_model(smiles):
@@ -718,27 +707,17 @@ def build_solvated_model(smiles):
     return vacuum_system, vacuum_positions, vacuum_topology, solvated_system, solvated_positions, solvated_topology
     
     
-    
-    
-
-
-# In[72]:
 
 
 smi = 'CCC'
 vac_sys, vac_pos, vac_top, solv_sys, solv_pos, solv_top = build_solvated_model(smi)
 
 
-# In[73]:
-
 
 ress = [res for res in solv_top.residues() if res.name == 'MOL']
 assert len(ress) == 1
 for atom in ress[0].atoms():
     print(atom.index, atom.name)
-
-
-# In[74]:
 
 
 os.system('rm -r test')
@@ -757,9 +736,6 @@ inter = InterpolAIS(complex_system = solv_sys,
                  platform = 'cpu')
 
 
-# In[75]:
-
-
 print(solv_pos)
 solv_pos = inter.minimize(solv_pos)
 print(solv_pos)
@@ -768,22 +744,3 @@ inter.anneal(complex_positions = solv_pos,
              gamma = 1./unit.picoseconds, 
              dt = 1. * unit.femtoseconds,
              metropolize_propagator = False)
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
