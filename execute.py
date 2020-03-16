@@ -83,8 +83,7 @@ class ANI1_force_and_energy(object):
 
     def minimize(self,
                  coords: unit.quantity.Quantity,
-                 maxiter: int = 1000,
-                 show_plot: bool = False):
+                 maxiter: int = 1000):
         """
         Minimizes the molecule. Note, we usually don't want to do this given an input structure since they are already distributed i.i.d.
         
