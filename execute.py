@@ -8,18 +8,14 @@
 
 import torchani
 import torch
-import numpy as np
 import mdtraj as md
 from simtk import unit
 from openmmtools.constants import kB
-import random
 import os
 
 atomic_num_to_symbol_dict = {1: 'H', 6: 'C', 7: 'N', 8: 'O'}
 mass_dict_in_daltons = {'H': 1.0, 'C': 12.0, 'N': 14.0, 'O': 16.0}
 import numpy as np
-from numba import jit
-from simtk.unit.quantity import is_dimensionless
 import mdtraj.utils as mdtrajutils
 from openmmtools.states import ThermodynamicState, SamplerState
 
@@ -38,15 +34,6 @@ _logger.setLevel(logging.DEBUG)
 
 
 class ANI1_force_and_energy(object):
-    
-    #some imports
-#     import torchani
-#     import torch
-#     import numpy as np
-#     import mdtraj as md
-#     from simtk import unit
-#     from openmmtools.constants import kB
-#     import random
     
     #some class attributes
     mass_unit = unit.dalton
