@@ -722,35 +722,35 @@ def build_solvated_model(smiles):
 
     return vacuum_system, vacuum_positions, vacuum_topology, solvated_system, solvated_positions, solvated_topology
 
+if __name__ == '__main__':
+    smi = 'CCC'
+    vac_sys, vac_pos, vac_top, solv_sys, solv_pos, solv_top = build_solvated_model(smi)
 
-smi = 'CCC'
-vac_sys, vac_pos, vac_top, solv_sys, solv_pos, solv_top = build_solvated_model(smi)
+    ress = [res for res in solv_top.residues() if res.name == 'MOL']
+    assert len(ress) == 1
+    for atom in ress[0].atoms():
+        print(atom.index, atom.name)
 
-ress = [res for res in solv_top.residues() if res.name == 'MOL']
-assert len(ress) == 1
-for atom in ress[0].atoms():
-    print(atom.index, atom.name)
+    os.system('rm -r test')
 
-os.system('rm -r test')
+    inter = InterpolAIS(complex_system=solv_sys,
+                        complex_topology=solv_top,
+                        ligand_system=vac_sys,  # note this must be unique
+                        ligand_subset_indices=range(11),
+                        temperature=300 * unit.kelvin,
+                        pressure=1 * unit.atmosphere,
+                        trajectory_directory='test',
+                        trajectory_prefix='trial_1',
+                        atom_selection_string='all',
+                        lambda_sequence=np.zeros(100),
+                        ani_model=torchani.models.ANI1ccx(),
+                        platform='cpu')
 
-inter = InterpolAIS(complex_system=solv_sys,
-                    complex_topology=solv_top,
-                    ligand_system=vac_sys,  # note this must be unique
-                    ligand_subset_indices=range(11),
-                    temperature=300 * unit.kelvin,
-                    pressure=1 * unit.atmosphere,
-                    trajectory_directory='test',
-                    trajectory_prefix='trial_1',
-                    atom_selection_string='all',
-                    lambda_sequence=np.zeros(100),
-                    ani_model=torchani.models.ANI1ccx(),
-                    platform='cpu')
-
-print(solv_pos)
-solv_pos = inter.minimize(solv_pos)
-print(solv_pos)
-inter.anneal(complex_positions=solv_pos,
-             n_steps_per_propagation=1,
-             gamma=1. / unit.picoseconds,
-             dt=1. * unit.femtoseconds,
-             metropolize_propagator=False)
+    print(solv_pos)
+    solv_pos = inter.minimize(solv_pos)
+    print(solv_pos)
+    inter.anneal(complex_positions=solv_pos,
+                 n_steps_per_propagation=1,
+                 gamma=1. / unit.picoseconds,
+                 dt=1. * unit.femtoseconds,
+                 metropolize_propagator=False)
