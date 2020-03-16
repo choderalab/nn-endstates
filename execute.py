@@ -168,7 +168,7 @@ class ANI1_force_and_energy(object):
 
         return energy_in_hartree
 
-    def _target_energy_function(self, x) -> float:
+    def _target_energy_function(self, x) -> (float, np.array):
         """
         Given a coordinate set (x) the energy is calculated in kJ/mol.
         
@@ -179,7 +179,8 @@ class ANI1_force_and_energy(object):
             
         Returns
         -------
-        E : float, unit'd 
+        E : float, unitless (in kJ/mol)
+        F_flat : (len(x) * 3, )-shaped np.array, unitless (in kJ/mol / unit.angstrom)
         """
         x = x.reshape(-1, 3) * unit.angstrom
         F, E = self.calculate_force(x)
