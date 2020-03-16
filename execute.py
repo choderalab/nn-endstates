@@ -109,7 +109,7 @@ class ANI1_force_and_energy(object):
         f = optimize.minimize(self._traget_energy_function, x, method='BFGS',
                               jac=True, options={'maxiter': maxiter, 'disp': True})
 
-        logger.critical(f"Minimization status: {f.success}")
+        _logger.critical(f"Minimization status: {f.success}")
         memory_of_energy = copy.deepcopy(self.memory_of_energy)
         self.memory_of_energy = []
 
