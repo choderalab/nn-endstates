@@ -482,7 +482,7 @@ class InterpolAIS(object):
         x_old, v_old = x, v
         _logger.debug(f"\t\t\tbefore propagation u, ke, E_tot: {old_potential}, {old_ke},  {old_potential + old_ke}")
 
-        # Mixing parameters for half O step
+        # Mixing parameters for O step
         a = np.exp(-gamma * dt)
         b = np.sqrt(1 - np.exp(-2 * gamma * dt))
         _logger.debug(f"\t\t\ta, b scales: {a}, {b}")
