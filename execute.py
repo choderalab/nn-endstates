@@ -3,8 +3,6 @@
 
 # ## Annealed Importance Sampling to exchange intramolecular talks between torchANI and openmm.
 
-import os
-
 import mdtraj as md
 import torch
 import torchani
@@ -13,12 +11,25 @@ from simtk import unit
 
 atomic_num_to_symbol_dict = {1: 'H', 6: 'C', 7: 'N', 8: 'O'}
 mass_dict_in_daltons = {'H': 1.0, 'C': 12.0, 'N': 14.0, 'O': 16.0}
-import numpy as np
 import mdtraj.utils as mdtrajutils
 from openmmtools.states import ThermodynamicState, SamplerState
 
 from perses.dispersed.utils import configure_platform
 from openmmtools import cache, utils
+
+from perses.utils.openeye import smiles_to_oemol
+from openmoltools.forcefield_generators import generateTopologyFromOEMol
+from openmmforcefields.generators import SystemGenerator
+import simtk.openmm.app as app
+from openforcefield.topology import Molecule
+
+import numpy as np
+import os
+import simtk.openmm as openmm
+
+from scipy import optimize
+
+from perses.dispersed.utils import minimize
 
 cache.global_context_cache.platform = configure_platform(utils.get_fastest_platform().getName())
 
@@ -97,7 +108,7 @@ class ANI1_force_and_energy(object):
         -------
         coords:simtk.unit.quantity.Quantity
         """
-        from scipy import optimize
+
         assert (type(coords) == unit.quantity.Quantity)
 
         x = coords.value_in_unit(unit.angstrom)
@@ -270,9 +281,6 @@ class InterpolAIS(object):
                 which platform to use for ani
             
         """
-        import numpy as np
-        import os
-        import simtk.openmm as openmm
 
         assert (platform == 'cpu')
 
@@ -369,7 +377,6 @@ class InterpolAIS(object):
         return reduced_potential
 
     def minimize(self, complex_positions):
-        from perses.dispersed.utils import minimize
         complex_sampler_state, ligand_sampler_state = self._create_sampler_states(complex_positions)
         minimize(self.complex_thermostate, complex_sampler_state)
         return complex_sampler_state.positions
@@ -451,7 +458,7 @@ class InterpolAIS(object):
 
         def sample_maxwell_boltzmann():
             return np.sqrt((1. / self.complex_thermostate.beta).value_in_unit(m_unit * v_unit ** 2)) * (
-                        np.random.randn(mass_matrix.shape[1], 3) / np.sqrt(mass_matrix)[0, :][:, None])
+                    np.random.randn(mass_matrix.shape[1], 3) / np.sqrt(mass_matrix)[0, :][:, None])
 
         def V(v):
             force = self._compute_hybrid_forces(_lambda_index).value_in_unit(m_unit * x_unit / (t_unit ** 2))
@@ -663,14 +670,6 @@ class InterpolAIS(object):
 
 
 def build_solvated_model(smiles):
-
-    from perses.utils.openeye import smiles_to_oemol
-    from openmoltools.forcefield_generators import generateTopologyFromOEMol
-    from openmmforcefields.generators import SystemGenerator
-    import simtk.openmm.app as app
-    from openforcefield.topology import Molecule
-    import simtk.openmm as openmm
-
     forcefield_files = ['amber14/protein.ff14SB.xml', 'amber14/tip3p.xml']
     oemol = smiles_to_oemol(smiles)
     molecules = [Molecule.from_openeye(oemol)]
@@ -724,6 +723,7 @@ def build_solvated_model(smiles):
     vacuum_system = vac_system_generator.create_system(vacuum_topology)
 
     return vacuum_system, vacuum_positions, vacuum_topology, solvated_system, solvated_positions, solvated_topology
+
 
 if __name__ == '__main__':
     smiles = 'CCC'
