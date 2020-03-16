@@ -274,6 +274,8 @@ class InterpolAIS(object):
         import os
         import simtk.openmm as openmm
 
+        assert (platform == 'cpu')
+
         self.context_cache = cache.global_context_cache
 
         self.lambda_sequence = lambda_sequence
@@ -661,6 +663,7 @@ class InterpolAIS(object):
 
 
 def build_solvated_model(smiles):
+
     from perses.utils.openeye import smiles_to_oemol
     from openmoltools.forcefield_generators import generateTopologyFromOEMol
     from openmmforcefields.generators import SystemGenerator
@@ -669,7 +672,7 @@ def build_solvated_model(smiles):
     import simtk.openmm as openmm
 
     forcefield_files = ['amber14/protein.ff14SB.xml', 'amber14/tip3p.xml']
-    oemol = smiles_to_oemol(smi)
+    oemol = smiles_to_oemol(smiles)
     molecules = [Molecule.from_openeye(oemol)]
 
     coords = oemol.GetCoords()
@@ -723,8 +726,8 @@ def build_solvated_model(smiles):
     return vacuum_system, vacuum_positions, vacuum_topology, solvated_system, solvated_positions, solvated_topology
 
 if __name__ == '__main__':
-    smi = 'CCC'
-    vac_sys, vac_pos, vac_top, solv_sys, solv_pos, solv_top = build_solvated_model(smi)
+    smiles = 'CCC'
+    vac_sys, vac_pos, vac_top, solv_sys, solv_pos, solv_top = build_solvated_model(smiles)
 
     ress = [res for res in solv_top.residues() if res.name == 'MOL']
     assert len(ress) == 1
