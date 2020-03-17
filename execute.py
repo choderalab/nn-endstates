@@ -61,9 +61,9 @@ class ANI1_force_and_energy(object):
 
         """
         Performs energy and force calculations.
-        Slightly modified code from: 
+        Slightly modified code from:
             https://gist.github.com/wiederm/7ac5c29e5a0dea9d17ef16dda93fe02d#file-reweighting-py-L42; thanks, Marcus
-        
+
         Parameters
         ----------
         model: torchani.models object
@@ -97,7 +97,7 @@ class ANI1_force_and_energy(object):
                  maxiter: int = 1000):
         """
         Minimizes the molecule. Note, we usually don't want to do this given an input structure since they are already distributed i.i.d.
-        
+
         Parameters
         ----------
         coords:simtk.unit.quantity.Quantity
@@ -127,12 +127,12 @@ class ANI1_force_and_energy(object):
                         x: unit.quantity.Quantity) -> (unit.quantity.Quantity, unit.quantity.Quantity):
         """
         Given a coordinate set the forces with respect to the coordinates are calculated.
-        
+
         Parameters
         ----------
         x : array of floats, unit'd (distance unit)
             initial configuration
-            
+
         Returns
         -------
         F : float, unit'd
@@ -162,16 +162,16 @@ class ANI1_force_and_energy(object):
         """
         Helpter function to return energies as tensor.
         Given a coordinate set the energy is calculated.
-        
+
         Parameters
         ----------
-        coordinates : torch.tensor 
+        coordinates : torch.tensor
             coordinates in angstroms without units attached
-            
+
         Returns
         -------
         energy_in_hartree : torch.tensor
-            
+
         """
 
         # stddev_in_hartree = torch.tensor(0.0,device = self.device, dtype=torch.float64)
@@ -182,12 +182,12 @@ class ANI1_force_and_energy(object):
     def _target_energy_function(self, x) -> (float, np.array):
         """
         Given a coordinate set (x) the energy is calculated in kJ/mol.
-        
+
         Parameters
         ----------
         x : array of floats, unit'd (distance unit)
             initial configuration
-            
+
         Returns
         -------
         E : float, unitless (in kJ/mol)
@@ -206,7 +206,7 @@ class ANI1_force_and_energy(object):
         ----------
         x : array of floats, unit'd (angstroms)
             initial configuration
-            
+
         Returns
         -------
         energy : unit.quantity.Quantity
@@ -228,14 +228,14 @@ class InterpolAIS(object):
         1.  all intermolecular talks happen with sterics
         2.  all intramolecular talks of the `ligand` of interest happen with OpenMM at lambda = 0 and with torchANI at lambda = 1
         3.  all environment atoms talk to each other with OpenMM for all lambdas
-        
+
     Example:
-    
+
         input : complex_system, complex_topology
         output : trajectory, particle_works
-    
-        
-    
+
+
+
     """
 
     def __init__(self,
@@ -253,9 +253,9 @@ class InterpolAIS(object):
                  platform='cpu'):
         """
         create vacuum_openmm_ligand system, vacuum_torchani_ligand system, and logger object
-        
+
         Arguments:
-            complex_system : openmm.System 
+            complex_system : openmm.System
                 openmm system of the complex
             complex_topology : openmm.Topology
                 topology of the complex
@@ -279,7 +279,7 @@ class InterpolAIS(object):
                 model from which to compute energies and forces
             platform : str, default 'cpu'
                 which platform to use for ani
-            
+
         """
 
         assert (platform == 'cpu')
@@ -432,7 +432,7 @@ class InterpolAIS(object):
                        metropolize=False):
         """
         Simulate n_steps of BAOAB, accumulating heat
-        
+
         args
             n_steps : int, default 1
                 number of steps of dynamics to run
@@ -446,23 +446,24 @@ class InterpolAIS(object):
         _complex_sampler_state, _ligand_sampler_state = SamplerState.from_context(
             self.complex_context), SamplerState.from_context(self.ligand_context)
         x_unit, v_unit, t_unit, m_unit = unit.nanometers, unit.nanometers / unit.femtoseconds, unit.femtoseconds, unit.daltons
-        x, v = _complex_sampler_state.positions.value_in_unit(
-            unit.nanometers), _complex_sampler_state.velocities.value_in_unit(unit.nanometers / unit.femtoseconds)
-        dt = dt.value_in_unit(t_unit)
-        gamma = gamma * t_unit
-        mass_matrix = self.mass_matrix.value_in_unit(m_unit)
+        x, v = _complex_sampler_state.positions, _complex_sampler_state.velocities
+        beta = self.complex_thermostate.beta
 
-        def compute_kinetic_energy(v):
-            return 0.5 * np.sum(
-                np.matmul(np.square(v.T), mass_matrix.T)) * m_unit * v_unit ** 2 * self.complex_thermostate.beta
+
+        def compute_reduced_kinetic_energy(v):
+            return 0.5 * np.sum(v**2 * self.mass_matrix[0,:][:, None]) * beta
 
         def sample_maxwell_boltzmann():
-            return np.sqrt((1. / self.complex_thermostate.beta).value_in_unit(m_unit * v_unit ** 2)) * (
-                    np.random.randn(mass_matrix.shape[1], 3) / np.sqrt(mass_matrix)[0, :][:, None])
+            #we can't raise unit.Quantity objects to non-integer powers, so i will attempt to remove and replace units manually...
+            kT = (1/beta).value_in_unit(m_unit * (v_unit**2))
+            reduced_mass_matrix = self.mass_matrix.value_in_unit(m_unit)
+            reduced_return = np.sqrt(kT) * np.random.randn(self.mass_matrix.shape[1], 3) / ((reduced_mass_matrix[0,:][:,None])**0.5)
+            return_with_units = reduced_return * v_unit
+            return return_with_units
 
         def V(v):
-            force = self._compute_hybrid_forces(_lambda_index).value_in_unit(m_unit * x_unit / (t_unit ** 2))
-            dv = (dt / 2.) * (force / mass_matrix[0, :][:, None])
+            force = self._compute_hybrid_forces(_lambda_index)
+            dv = (dt / 2.) * (force / self.mass_matrix[0, :][:, None])
             return v + dv
 
         def R(x, v):
@@ -470,22 +471,19 @@ class InterpolAIS(object):
             return x + dx
 
         def OU(v):
+            a = np.exp(-gamma * dt)
+            b = np.sqrt(1 - np.exp(-2 * gamma * dt))
             mb_sample = sample_maxwell_boltzmann()
-            _logger.debug(f"\t\t\t\tmaxwell boltzmann sample KE: {compute_kinetic_energy(mb_sample)}")
+            _logger.debug(f"\t\t\t\tmaxwell boltzmann sample KE: {compute_reduced_kinetic_energy(mb_sample)}")
             return a * v + b * mb_sample
 
-        if metropolize:
+        if metropolize: #if we are metropolizing the move, we start with a velocity sample drawn from maxwell boltzmann distribution
             v = sample_maxwell_boltzmann()
-        old_potential, old_ke = self._compute_hybrid_potential(_lambda_index), compute_kinetic_energy(v)
+        old_potential, old_ke = self._compute_hybrid_potential(_lambda_index), compute_reduced_kinetic_energy(v)
         # 0.5 * np.sum(np.matmul(mass_matrix, np.square(v))) * m_unit * v_unit**2 * self.complex_thermostate.beta
         E_old = old_potential + old_ke
         x_old, v_old = x, v
         _logger.debug(f"\t\t\tbefore propagation u, ke, E_tot: {old_potential}, {old_ke},  {old_potential + old_ke}")
-
-        # Mixing parameters for O step
-        a = np.exp(-gamma * dt)
-        b = np.sqrt(1 - np.exp(-2 * gamma * dt))
-        _logger.debug(f"\t\t\ta, b scales: {a}, {b}")
 
         _logger.debug(f"\t\t\tbeginning integration...")
         for i in range(n_steps):
@@ -495,7 +493,7 @@ class InterpolAIS(object):
             # V step
             v = V(v)
             _logger.debug(f"\t\t\t\tV")
-            _logger.debug(f"\t\t\t\t\tupdated ke: {compute_kinetic_energy(v)}")
+            _logger.debug(f"\t\t\t\t\tupdated ke: {compute_reduced_kinetic_energy(v)}")
 
             # R step
             x = R(x, v)
@@ -503,12 +501,12 @@ class InterpolAIS(object):
 
             # O step
             _logger.debug(f"\t\t\t\tO")
-            ke_old = compute_kinetic_energy(v)
+            ke_old = compute_reduced_kinetic_energy(v)
             _logger.debug(f"\t\t\t\tke_old: {ke_old}")
 
             v = OU(v)
 
-            ke_new = compute_kinetic_energy(v)
+            ke_new = compute_reduced_kinetic_energy(v)
             _logger.debug(f"\t\t\t\tke_new: {ke_new}")
 
             Q += (ke_new - ke_old)
@@ -519,19 +517,19 @@ class InterpolAIS(object):
             _logger.debug(f"\t\t\t\tR")
 
             # update contexts before computing forces again
-            _complex_sampler_state.positions = x * x_unit
-            _complex_sampler_state.velocities = v * v_unit
+            _complex_sampler_state.positions = x
+            _complex_sampler_state.velocities = v
             _complex_sampler_state.apply_to_context(self.complex_context)
-            _ligand_sampler_state.positions = x[self.ligand_subset_indices, :] * x_unit
+            _ligand_sampler_state.positions = x[self.ligand_subset_indices, :]
             _ligand_sampler_state.apply_to_context(self.ligand_context)
 
             # V step
             v = V(v)
             _logger.debug(f"\t\t\t\tV")
-            _logger.debug(f"\t\t\t\t\tupdated ke: {compute_kinetic_energy(v)}")
+            _logger.debug(f"\t\t\t\t\tupdated ke: {compute_reduced_kinetic_energy(v)}")
 
             # Update W_shads
-            new_potential, new_ke = self._compute_hybrid_potential(_lambda_index), compute_kinetic_energy(v)
+            new_potential, new_ke = self._compute_hybrid_potential(_lambda_index), compute_reduced_kinetic_energy(v)
             E_new = new_potential + new_ke
             W_shads += (E_new - E_old - Q)
 
@@ -544,13 +542,13 @@ class InterpolAIS(object):
         _logger.debug(f"\t\t\tacceptance_probability: {acceptance_probability}")
         if (metropolize and acceptance_probability >= np.random.rand()) or (not metropolize):
             _logger.debug(f"\t\t\taccepted")
-            _complex_sampler_state.velocities = v * v_unit
+            _complex_sampler_state.velocities = v
             _complex_sampler_state.apply_to_context(self.complex_context)
         else:
             _logger.debug(f"\t\t\trejected")
-            _complex_sampler_state.positions = x_old * x_unit
-            _complex_sampler_state.velocities = v_old * v_unit
-            _ligand_sampler_state.positions = x_old[self.ligand_subset_indices, :] * x_unit
+            _complex_sampler_state.positions = x_old
+            _complex_sampler_state.velocities = v_old
+            _ligand_sampler_state.positions = x_old[self.ligand_subset_indices, :]
             _complex_sampler_state.apply_to_context(self.complex_context)
             _ligand_sampler_state.apply_to_context(self.ligand_context)
             Q, W_shads = 0., 0.
