@@ -155,7 +155,7 @@ class ANI1_force_and_energy(object):
         else:
             raise RuntimeError('Platform needs to be specified. Either CPU or CUDA.')
 
-        return (F * self.hartree_to_kJ_per_mole * self.nm_to_angstroms * (unit.kilojoule_per_mole / unit.nanometer),
+        return (F * self.hartree_to_kJ_per_mole * (unit.kilojoule_per_mole / unit.angstrom),
                 energy_in_hartree.item() * self.hartree_to_kJ_per_mole * unit.kilojoule_per_mole)
 
     def _calculate_energy(self, coordinates: torch.tensor):
@@ -464,7 +464,16 @@ class InterpolAIS(object):
         def V(v):
             force = self._compute_hybrid_forces(_lambda_index)
             dv = (dt / 2.) * (force / self.mass_matrix[0, :][:, None])
+            print(f"\t\t\t\t\tdv ke: {compute_reduced_kinetic_energy(dv)}")
             return v + dv
+
+
+        def V_stupid(v):
+            mass = 1.*unit.amus
+            force = self._compute_hybrid_forces(_lambda_index)
+            mass_matrix = self.mass_matrix[0,:].value_in_unit(m_unit)
+            dv_mat = (dt.value_in_unit(t_unit)/2.) * np.matmul(np.linalg.inv(np.diag(mass_matrix)), force.value_in_unit(v_unit**2 * m_unit  / x_unit)) * v_unit
+            print(f"\t\t\t\t\tdv ke_stupid: {compute_reduced_kinetic_energy(dv_mat)}")
 
         def R(x, v):
             dx = (dt / 2.0) * v
@@ -491,6 +500,7 @@ class InterpolAIS(object):
             #####################################
 
             # V step
+            V_stupid(v)
             v = V(v)
             _logger.debug(f"\t\t\t\tV")
             _logger.debug(f"\t\t\t\t\tupdated ke: {compute_reduced_kinetic_energy(v)}")
@@ -619,28 +629,28 @@ class InterpolAIS(object):
             _logger.debug(f"\t\tcomplex_positions_sample: {complex_sampler_state.positions[0, :]}")
             _logger.debug(f"\t\tcomplex_velocities_sample: {complex_sampler_state.velocities[0, :]}")
             _logger.debug(f"\t\tpropagating particle {n_steps_per_propagation} steps...")
-            try:
-                Q, schatten = self.simulate_baoab(
-                    _lambda_index,
-                    n_steps_per_propagation,
-                    gamma,
-                    dt,
-                    metropolize_propagator)
+            #try:
+            Q, schatten = self.simulate_baoab(
+                _lambda_index,
+                n_steps_per_propagation,
+                gamma,
+                dt,
+                metropolize_propagator)
 
-                shadow_works.append(schatten)
-                ligand_sampler_state.update_from_context(self.ligand_context)
-                complex_sampler_state.update_from_context(self.complex_context)
-                _logger.debug(f"\t\tcomplex_positions_sample updated: {complex_sampler_state.positions[0, :]}")
-                _logger.debug(f"\t\tcomplex_velocities_sample updated: {complex_sampler_state.velocities[0, :]}")
+            shadow_works.append(schatten)
+            ligand_sampler_state.update_from_context(self.ligand_context)
+            complex_sampler_state.update_from_context(self.complex_context)
+            _logger.debug(f"\t\tcomplex_positions_sample updated: {complex_sampler_state.positions[0, :]}")
+            _logger.debug(f"\t\tcomplex_velocities_sample updated: {complex_sampler_state.velocities[0, :]}")
 
-                self._record_trajectory(complex_sampler_state)
+            self._record_trajectory(complex_sampler_state)
 
-                reduced_potential = self._compute_hybrid_potential(
-                    lambda_index=_lambda_index)
+            reduced_potential = self._compute_hybrid_potential(
+                lambda_index=_lambda_index)
 
-            except Exception as e:
-                _logger.warning(f"{e}")
-                break
+            # except Exception as e:
+            #     _logger.warning(f"{e}")
+            #     break
 
         # now that we are out of the loop, we can write to the recorders
         self.incremental_works.append(incremental_works)
