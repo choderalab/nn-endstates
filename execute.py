@@ -138,7 +138,7 @@ class ANI1_force_and_energy(object):
         F : float, unit'd
         E : float, unit'd
         """
-        assert (type(x) == unit.quantity.Quantity)
+        #assert (type(x) == unit.quantity.Quantity)
 
         coordinates = torch.tensor([x.value_in_unit(unit.angstroms)],
                                    requires_grad=True, device=self.device, dtype=torch.float32)
@@ -213,7 +213,7 @@ class ANI1_force_and_energy(object):
             energy in kJ/mol
         """
 
-        assert (type(x) == unit.quantity.Quantity)
+        #assert (type(x) == unit.quantity.Quantity)
         coordinates = torch.tensor([x.value_in_unit(unit.angstroms)],
                                    requires_grad=True, device=self.device, dtype=torch.float32)
 
