@@ -309,14 +309,15 @@ class Propagator(OMMBIP):
     Step 1: initialization--
         set iteration = 0, n_iterations = n_iterations, lambda  = 0 (i.e. iteration / n_iterations); work_accumulated = 0.0
         generate sample x_0 ~ e^(-p(x))
-        evaluate work_incremental = 0 (i.e. u_mm(x_0) / p(x_0), but we presume that p = u_mm(.))
+        evaluate work_incremental = 0 (i.e. u_mm(x_0) - g(x_0), but we presume that g = u_mm(.))
         work_accumulated <- work_accumulated + work_incremental
         x' = x_0
     Step 2: sampling
         for increment in range(n_iterations):
             x = x'
+            ante_perturbation_potential =  (1 - lambda) * u_mm(x) + lambda * u_ani_mm_mix(x)
             set iteration <- iteration + 1.0; lambda <- iteration / n_iterations
-            evaluate work_incremental = (1 - lambda) * u_mm(x) + lambda * u_ani_mm_mix(x)
+            evaluate work_incremental = [(1 - lambda) * u_mm(x) + lambda * u_ani_mm_mix(x)] - ante_perturbation_potential
             work_accumulated <- work_accumulated + work_incremental
             create a modified force: modified_f = (1 - lambda) * f_mm + lambda * f_ani_mm_mix (where f_. = -grad(u_.) )
             x' =  V R O R (where V deterministic update is according to modified_f defined above) w.r.t x
