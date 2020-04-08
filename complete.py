@@ -99,7 +99,7 @@ class ANI1_force_and_energy(object):
         Parameters
         ----------
         coords:simtk.unit.quantity.Quantity
-        maxiter: int
+        maxiter: int, default:1000
             Maximum number of minimization steps performed.
 
         Returns
@@ -111,7 +111,7 @@ class ANI1_force_and_energy(object):
 
         x = coords.value_in_unit(unit.angstrom)
         self.memory_of_energy = []
-        print("Begin minimizing...")
+        _logger.info("Begin minimizing...")
         f = optimize.minimize(self._target_energy_function, x, method='BFGS',
                               jac=True, options={'maxiter': maxiter, 'disp': True})
 
@@ -245,7 +245,7 @@ class Integrator(OMMLI):
                Collision rate
             timestep : np.unit.Quantity compatible with femtoseconds, default: 1.0*unit.femtoseconds
                Integration timestep
-            constraint_tolerance : float, default: 1.0e-8
+            constraint_tolerance : float, default: 1.0e-6
                 Tolerance for constraint solver
         """
         #just super our previous method
@@ -341,7 +341,7 @@ class Propagator(OMMBIP):
                  context_cache=None,
                  reassign_velocities=True,
                  n_restart_attempts=0,
-                 reporter = None,
+                 reporter=None,
                  **kwargs):
         """
         arguments
@@ -355,13 +355,13 @@ class Propagator(OMMBIP):
                 integrator of dynamics
             ani_handler : ANI1_force_and_energy
                 handler for ani forces and potential energy
-            context_cache : openmmtools.cache.ContextCache, optional
+            context_cache : openmmtools.cache.ContextCache, optional default:None
                 The ContextCache to use for Context creation. If None, the global cache
-                openmmtools.cache.global_context_cache is used (default is None).
-            reassign_velocities : bool, optional
+                openmmtools.cache.global_context_cache is used.
+            reassign_velocities : bool, optional default:False
                 If True, the velocities will be reassigned from the Maxwell-Boltzmann
-                distribution at the beginning of the move (default is False).
-            n_restart_attempts : int, optional
+                distribution at the beginning of the move.
+            n_restart_attempts : int, optional default:0
                 When greater than 0, if after the integration there are NaNs in energies,
                 the move will restart. When the integrator has a random component, this
                 may help recovering. On the last attempt, the ``Context`` is
@@ -611,7 +611,7 @@ def annealed_importance_sampling(system,
 
     #make a handle object for ANI
     species_str = ''.join([atom.element.symbol for atom in md_topology.subset(list(subset_indices_map.keys())).atoms])
-    print(f"species string: {species_str}")
+    _logger.info(f"species string: {species_str}")
     ani_handler = ANI1_force_and_energy(model = torchani.models.ANI1ccx(),
                                                  atoms=species_str,
                                                  platform='cpu',
