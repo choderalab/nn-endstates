@@ -141,7 +141,7 @@ class ANI1_force_and_energy(object):
         coordinates = torch.tensor([x.value_in_unit(unit.angstroms)],
                                    requires_grad=True, device=self.device, dtype=torch.float32)
 
-        energy_in_hartree = self._calculate_energy(coordinates)
+        energy_in_hartree = self._reform_as_energy_tensor(coordinates)
 
         # derivative of E (in kJ/mol) w.r.t. coordinates (in nm)
         derivative = torch.autograd.grad((energy_in_hartree).sum(), coordinates)[0]
@@ -156,7 +156,7 @@ class ANI1_force_and_energy(object):
         return (F * self.hartree_to_kJ_per_mole * (unit.kilojoule_per_mole / unit.angstrom),
                 energy_in_hartree.item() * self.hartree_to_kJ_per_mole * unit.kilojoule_per_mole)
 
-    def _calculate_energy(self, coordinates: torch.tensor):
+    def _reform_as_energy_tensor(self, coordinates: torch.tensor):
         """
         Helpter function to return energies as tensor.
         Given a coordinate set the energy is calculated.
@@ -215,7 +215,7 @@ class ANI1_force_and_energy(object):
         coordinates = torch.tensor([x.value_in_unit(unit.angstroms)],
                                    requires_grad=True, device=self.device, dtype=torch.float32)
 
-        energy_in_hartrees = self._calculate_energy(coordinates)
+        energy_in_hartrees = self._reform_as_energy_tensor(coordinates)
         energy = energy_in_hartrees.item() * self.hartree_to_kJ_per_mole * unit.kilojoule_per_mole
         return energy
 
@@ -235,9 +235,10 @@ class Integrator(OMMLI):
 
         arguments
             splitting : string, default: "V R O R"
-                Sequence of "R", "V", "O" (and optionally "{", "}", "V0", "V1", ...) substeps to be executed each timestep.
-                Forces are only used in V-step. Handle multiple force groups by appending the force group index
+                Sequence of "R", "V", "O" (and optionally "{", "}", "V0", "V1", "F" ...) substeps to be executed each timestep.
+                Externally modified Forces (i.e. 'modified_f') are only used in V-step. Handle multiple force groups by appending the force group index
                 to V-steps, e.g. "V0" will only use forces from force group 0. "V" will perform a step using all forces.
+                Force group splitting is disabled.  "F" updates a perDofVariable 'modified_f' from the integrator 'f'
             temperature : np.unit.Quantity compatible with kelvin, default: 300.0*unit.kelvin
                Fictitious "bath" temperature
             collision_rate : np.unit.Quantity compatible with 1/picoseconds, default: 1.0/unit.picoseconds
@@ -254,7 +255,7 @@ class Integrator(OMMLI):
                          splitting,
                          constraint_tolerance,
                          **kwargs)
-        
+
 
     def _add_V_step(self, force_group="0"):
         """Deterministic velocity update, using only forces from force-group fg.
@@ -267,42 +268,70 @@ class Integrator(OMMLI):
 
         # update velocities
         if self._mts:
-            self.addComputePerDof("v", "v + ((dt / {}) * moddi / m)".format(self._force_group_nV[force_group], force_group))
+            self.addComputePerDof("v", "v + ((dt / {}) * modified_force / m)".format(self._force_group_nV[force_group], force_group))
         else:
-            self.addComputePerDof("v", "v + (dt / {}) * moddi / m".format(self._force_group_nV["0"]))
+            self.addComputePerDof("v", "v + (dt / {}) * modified_force / m".format(self._force_group_nV["0"]))
 
         self.addConstrainVelocities()
 
 
         self.addComputeSum("new_ke", self._kinetic_energy)
         self.addComputeGlobal("shadow_work", "shadow_work + (new_ke - old_ke)")
-    
+
     def _add_F_step(self):
         """
-        add an moddi update step
+        pull the mm force as a perDofVariable from the integrator to be modified
         """
-        self.addComputePerDof('moddi', 'f')
-        
-    
+        self.addComputePerDof('modified_force', 'f')
+
+
     def _add_variables(self):
         super()._add_variables()
-        self.addPerDofVariable('moddi', 0)
-    
+        self.addPerDofVariable('modified_force', 0)
+
     def _add_integrator_steps(self):
         """
         Add the steps to the integrator--this can be overridden to place steps around the integration.
         """
         super()._add_integrator_steps()
         #self.addUpdateContextState()
-    
+
     @property
     def _step_dispatch_table(self):
         dispatch_table = super()._step_dispatch_table
-        dispatch_table['F'] = (self._add_F_step, False) #add a moddi variable
+        dispatch_table['F'] = (self._add_F_step, False) #add a modified_force variable
         return dispatch_table
-        
-    
+
+
 class Propagator(OMMBIP):
+    """
+    Propagator pseudocode:
+    Step 1: initialization--
+        set iteration = 0, n_iterations = n_iterations, lambda  = 0 (i.e. iteration / n_iterations); work_accumulated = 0.0
+        generate sample x_0 ~ e^(-p(x))
+        evaluate work_incremental = 0 (i.e. u_mm(x_0) / p(x_0), but we presume that p = u_mm(.))
+        work_accumulated <- work_accumulated + work_incremental
+        x' = x_0
+    Step 2: sampling
+        for increment in range(n_iterations):
+            x = x'
+            set iteration <- iteration + 1.0; lambda <- iteration / n_iterations
+            evaluate work_incremental = (1 - lambda) * u_mm(x) + lambda * u_ani_mm_mix(x)
+            work_accumulated <- work_accumulated + work_incremental
+            create a modified force: modified_f = (1 - lambda) * f_mm + lambda * f_ani_mm_mix (where f_. = -grad(u_.) )
+            x' =  V R O R (where V deterministic update is according to modified_f defined above) w.r.t x
+
+    NOTE: in this regime, the last x' is propagated w.r.t. a propagator whose invariant distribution respects u_ani_mm_mix;
+    this should _not_ be the case.  There should be an exception in the Step 2 for loop that breaks once the final work_incremental is computed and updated
+    to the work_accumulated. Regardless, the distribution of accumulated works is unaffected by this 'bug'; only expectations (as a function of x) w.r.t. these
+    weights may be affected.
+
+    See: 3.1.1. of https://www.stats.ox.ac.uk/~doucet/delmoral_doucet_jasra_sequentialmontecarlosamplersJRSSB.pdf (esp. Remark 1.)
+
+
+
+
+    """
     def __init__(self,
                  openmm_pdf_state,
                  openmm_pdf_state_subset,
@@ -338,7 +367,7 @@ class Propagator(OMMBIP):
                 may help recovering. On the last attempt, the ``Context`` is
                 re-initialized in a slower process, but better than the simulation
                 crashing. An IntegratorMoveError is raised after the given number of
-                attempts if there are still NaNs. 
+                attempts if there are still NaNs.
             reporter : coddiwomple.openmm.reporter.OpenMMReporter, default None
                 a reporter object to write trajectories
         """
@@ -350,20 +379,20 @@ class Propagator(OMMBIP):
         #create a pdf state for the subset indices (usually a vacuum system)
         self.pdf_state_subset = openmm_pdf_state_subset
         assert self.pdf_state_subset.temperature == self.pdf_state.temperature, f"the temperatures of the pdf states do not match"
-        
+
         #create a dictionary for subset indices
         self._subset_indices_map = subset_indices_map
-        
+
         #create an ani handler attribute that can be referenced
         self.ani_handler = ani_handler
-        
+
         #create a context for the subset atoms that can be referenced
         self.context_subset, _ = cache.global_context_cache.get_context(self.pdf_state_subset)
-        
+
         #create a reporter for the accumulated works
         self._state_works = {}
         self._state_works_counter = 0
-        
+
         #create a reporter
         self._write_trajectory = False if reporter is None else True
         self.reporter=reporter
@@ -372,88 +401,86 @@ class Propagator(OMMBIP):
             self.particle = Particle(0)
         else:
             self.particle = None
-        
+
     def _before_integration(self, *args, **kwargs):
         particle_state = args[0] #define the particle state
         n_iterations = args[1] #define the number of iterations
-        
+
         self._current_state_works = [] #define an interim (auxiliary) list that will track the thermodynamic work of the current application
         self._current_state_works.append(0.0) #the first incremental work is always 0 since the importance function is identical to the first target distribution (i.e. fully interacting MM)
-        
+
         self._iteration = 0.0 #define the first iteration as 0
         self._n_iterations = n_iterations #the number of iterations in the protocol is equal to the number of steps in the application
-        
+
         #update the particle state and the particle state subset
         particle_state.update_from_context(self.context, ignore_velocities=True) #update the particle state from the context
         self.particle_state_subset = SamplerState(positions = particle_state.positions[list(self._subset_indices_map.keys())]) #create a particle state from the subset context
         self.particle_state_subset.apply_to_context(self.context_subset, ignore_velocities=True) #apply the subset particle state to its context
         self.particle_state_subset.update_from_context(self.context_subset, ignore_velocities=True) #update the subset particle state from its context to updated the potential energy
-        #print(f"particle subset reduced potential: {self.pdf_state_subset.reduced_potential(self.particle_state_subset)}")
-           
+
         #get the reduced potential
         reduced_potential = self._compute_hybrid_potential(_lambda = self._iteration / self._n_iterations, particle_state = particle_state)
         perturbed_reduced_potential = self._compute_hybrid_potential(_lambda = (self._iteration + 1.0) / self._n_iterations, particle_state = particle_state)
         self._current_state_works.append(self._current_state_works[-1] + (perturbed_reduced_potential - reduced_potential))
-        #print(f"reduced_potential: {reduced_potential}; perturbed_potential: {perturbed_reduced_potential}")
-        
+
         #make a new force object
         mm_force_matrix = self._compute_hybrid_forces(_lambda = (self._iteration + 1.0) / self._n_iterations, particle_state = particle_state).value_in_unit_system(unit.md_unit_system)
-        self.integrator.setPerDofVariableByName('moddi', mm_force_matrix) 
-        
+        self.integrator.setPerDofVariableByName('modified_force', mm_force_matrix)
+
         #report
         if self._write_trajectory:
             self.particle.update_state(particle_state)
             self.reporter.record([self.particle])
-        
+
         #logger
         #self._log_context_parameters()
-        
-        
-    
+
+
+
     def _during_integration(self, *args, **kwargs):
         particle_state = args[0]
         self._iteration += 1.0
-        
-        
+
+
         #update the particle state and the particle state subset
         particle_state.update_from_context(self.context, ignore_velocities=True) #update the particle state from the context
         self.particle_state_subset.positions = particle_state.positions[list(self._subset_indices_map.keys())] #update the particle subset positions appropriately
         self.particle_state_subset.apply_to_context(self.context_subset, ignore_velocities=True) #apply the subset particle state to its context
         self.particle_state_subset.update_from_context(self.context_subset, ignore_velocities=True) #update the subset particle state from its context to updated the potential energy
-        
+
         #get the reduced potential
         if self._iteration < self._n_iterations:
             reduced_potential = self._compute_hybrid_potential(_lambda = self._iteration / self._n_iterations, particle_state = particle_state)
             perturbed_reduced_potential = self._compute_hybrid_potential(_lambda = (self._iteration + 1.0) / self._n_iterations, particle_state = particle_state)
             self._current_state_works.append(self._current_state_works[-1] + (perturbed_reduced_potential - reduced_potential))
-            
+
             #and create a new modified force
             mm_force_matrix = self._compute_hybrid_forces(_lambda = (self._iteration + 1.0) / self._n_iterations, particle_state = particle_state).value_in_unit_system(unit.md_unit_system)
-            self.integrator.setPerDofVariableByName('moddi', mm_force_matrix) 
+            self.integrator.setPerDofVariableByName('modified_force', mm_force_matrix)
         else:
             #we are done
             pass
-        
+
         if self._write_trajectory:
             self.particle.update_state(particle_state)
             if self._iteration == self._n_iterations:
                 self.reporter.record([self.particle], save_to_disk=True)
             else:
                 self.reporter.record([self.particle], save_to_disk=False)
-        
+
         #logger
         #self._log_context_parameters()
-            
-            
-        
+
+
+
     def _after_integration(self, *args, **kwargs):
         self._state_works[self._state_works_counter] = deepcopy(self._current_state_works)
         self._state_works_counter += 1
-        
+
         if self._write_trajectory:
             self.reporter.reset()
         #self._log_context_parameters()
-        
+
 
     def _compute_hybrid_potential(self,_lambda, particle_state):
         """
@@ -464,7 +491,7 @@ class Propagator(OMMBIP):
                              - _lambda * self.pdf_state_subset.reduced_potential(self.particle_state_subset)
                              + _lambda * self.ani_handler.calculate_energy(self.particle_state_subset.positions) * self.pdf_state.beta)
         return reduced_potential
-    
+
     def _compute_hybrid_forces(self, _lambda, particle_state):
         """
         function to compute a hybrid force matrix of shape num_particles x 3
@@ -502,7 +529,7 @@ class Propagator(OMMBIP):
         swig_parameters = self.context_subset.getParameters()
         context_parameters = {q: swig_parameters[q] for q in swig_parameters}
         return context_parameters
-    
+
     def _log_context_parameters(self):
         """
         log the context and context subset parameters
@@ -512,15 +539,15 @@ class Propagator(OMMBIP):
         _logger.debug(f"\tcontext_parameters during integration:")
         for key, val in context_parameters.items():
             _logger.debug(f"\t\t{key}: {val}")
-        
+
         _logger.debug(f"\tcontext subset parameters during integration:")
         for key, val in context_subset_parameters:
             _logger.debug(f"\t\t{key}: {val}")
-        
-    
+
+
     @property
     def state_works(self):
-        return self._state_works      
+        return self._state_works
 
 
 # In[ ]:
@@ -563,7 +590,7 @@ def annealed_importance_sampling(system,
         md_topology : mdtraj.Topology
             topology that will write the trajectory
         save_indices : list
-            list of indices that will be saved 
+            list of indices that will be saved
         number_of_applications : int
             number of applications of the propagator
         steps_per_application : int
@@ -581,7 +608,7 @@ def annealed_importance_sampling(system,
     traj = md.Trajectory.load(endstate_cache_filename)
     num_frames = traj.n_frames
     print(f"loaded {num_frames} from the cache")
-    
+
     #make a handle object for ANI
     species_str = ''.join([atom.element.symbol for atom in md_topology.subset(list(subset_indices_map.keys())).atoms])
     print(f"species string: {species_str}")
@@ -593,14 +620,14 @@ def annealed_importance_sampling(system,
     #make thermostates
     pdf_state = ThermodynamicState(system = system, temperature = integrator_kwargs['temperature'], pressure= integrator_kwargs['pressure'])
     pdf_state_subset = ThermodynamicState(system = system_subset, temperature = integrator_kwargs['temperature'], pressure = None)
-    
+
     #make a reporter
     reporter = OpenMMReporter(directory_name, trajectory_prefix, md_topology, subset_indices = save_indices)
-    
-    
+
+
     #make an integrator
     integrator = Integrator(**integrator_kwargs)
-    
+
     #make a propagator
     propagator = Propagator(openmm_pdf_state = pdf_state,
                  openmm_pdf_state_subset = pdf_state_subset,
@@ -614,7 +641,7 @@ def annealed_importance_sampling(system,
 
     frames = np.random.choice(range(num_frames), number_of_applications)
     particle = Particle(0)
-    
+
     for i in tqdm.trange(number_of_applications):
         if position_extractor is not None:
             positions = position_extractor(traj.xyz[frames[i]] * unit.nanometers)
@@ -765,7 +792,3 @@ def annealed_importance_sampling(system,
 
 
 # # In[ ]:
-
-
-
-
