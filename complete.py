@@ -19,12 +19,14 @@ import mdtraj as md
 import torch
 import torchani
 from openmmtools.constants import kB
+from openmmtools.utils import TrackedQuantity
 
 from openmmtools import cache, utils
 from perses.dispersed.utils import check_platform, configure_platform
 cache.global_context_cache.platform = configure_platform(utils.get_fastest_platform().getName())
 atomic_num_to_symbol_dict = {1: 'H', 6: 'C', 7: 'N', 8: 'O'}
 mass_dict_in_daltons = {'H': 1.0, 'C': 12.0, 'N': 14.0, 'O': 16.0}
+_allowable_quantities = [unit.quantity.Quantity, TrackedQuantity]
 
 import logging
 from copy import deepcopy
@@ -107,7 +109,7 @@ class ANI1_force_and_energy(object):
         coords:simtk.unit.quantity.Quantity
         """
 
-        assert (type(coords) == unit.quantity.Quantity)
+        assert type(coords) in _allowable_quantities
 
         x = coords.value_in_unit(unit.angstrom)
         self.memory_of_energy = []
@@ -136,7 +138,7 @@ class ANI1_force_and_energy(object):
         F : float, unit'd
         E : float, unit'd
         """
-        #assert (type(x) == unit.quantity.Quantity)
+        assert type(x) in _allowable_quantities
 
         coordinates = torch.tensor([x.value_in_unit(unit.angstroms)],
                                    requires_grad=True, device=self.device, dtype=torch.float32)
@@ -171,8 +173,6 @@ class ANI1_force_and_energy(object):
         energy_in_hartree : torch.tensor
 
         """
-
-        # stddev_in_hartree = torch.tensor(0.0,device = self.device, dtype=torch.float64)
         energy_in_hartree = self.model((self.species, coordinates)).energies
 
         return energy_in_hartree
@@ -211,7 +211,7 @@ class ANI1_force_and_energy(object):
             energy in kJ/mol
         """
 
-        #assert (type(x) == unit.quantity.Quantity)
+        assert type(x) in _allowable_quantities
         coordinates = torch.tensor([x.value_in_unit(unit.angstroms)],
                                    requires_grad=True, device=self.device, dtype=torch.float32)
 
