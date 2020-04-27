@@ -343,6 +343,7 @@ class Propagator(OMMBIP):
                  reassign_velocities=True,
                  n_restart_attempts=0,
                  reporter=None,
+                 write_trajectory_interval = 1,
                  **kwargs):
         """
         arguments
@@ -371,6 +372,8 @@ class Propagator(OMMBIP):
                 attempts if there are still NaNs.
             reporter : coddiwomple.openmm.reporter.OpenMMReporter, default None
                 a reporter object to write trajectories
+            write_trajectory_interval : int
+                frequency of writing trajectory
         """
         super().__init__(openmm_pdf_state,
                  integrator,
@@ -400,8 +403,10 @@ class Propagator(OMMBIP):
         if self._write_trajectory:
             from coddiwomple.particles import Particle
             self.particle = Particle(0)
+            self.write_trajectory_interval=write_trajectory_interval
         else:
             self.particle = None
+            self.write_trajectory_interval=None
 
     def _before_integration(self, *args, **kwargs):
         particle_state = args[0] #define the particle state
@@ -429,7 +434,7 @@ class Propagator(OMMBIP):
         self.integrator.setPerDofVariableByName('modified_force', mm_force_matrix)
 
         #report
-        if self._write_trajectory:
+        if self._write_trajectory: # the first state is always saved for processing purposes
             self.particle.update_state(particle_state)
             self.reporter.record([self.particle])
 
@@ -462,7 +467,7 @@ class Propagator(OMMBIP):
             #we are done
             pass
 
-        if self._write_trajectory:
+        if self._write_trajectory and int(self._iteration) % self.write_trajectory_interval == 0:
             self.particle.update_state(particle_state)
             if self._iteration == self._n_iterations:
                 self.reporter.record([self.particle], save_to_disk=True)
@@ -570,7 +575,8 @@ def annealed_importance_sampling(system,
                                                       'constraint_tolerance': 1e-6,
                                                       'pressure': 1.0 * unit.atmosphere},
                                  save_indices = None,
-                                 position_extractor = None
+                                 position_extractor = None,
+                                 write_trajectory_interval=1
                                 ):
     """
     conduct annealed importance sampling in the openmm regime
@@ -602,6 +608,8 @@ def annealed_importance_sampling(system,
             list of indices of md_topology atoms to save to disk
         position_extractor : function, default None
             function to extract appropriate positons from the cache
+        write_trajectory_interval : int
+            frequency with which to write trajectory to disk
     """
     from coddiwomple.particles import Particle
     from coddiwomple.openmm.states import OpenMMParticleState, OpenMMPDFState
@@ -638,7 +646,8 @@ def annealed_importance_sampling(system,
                  context_cache=None,
                  reassign_velocities=True,
                  n_restart_attempts=0,
-                 reporter = reporter)
+                 reporter = reporter,
+                 write_trajectory_interval = write_trajectory_interval)
 
     frames = np.random.choice(range(num_frames), number_of_applications)
     particle = Particle(0)
