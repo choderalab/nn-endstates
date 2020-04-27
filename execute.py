@@ -9,7 +9,6 @@ import os
 """
 
 execute:
-python execute.py 1:factory_np_filename 2:phase 3:endstate 4:steps_per_application 5:number_of_applications 6:endstate_cache_filename 7:write_dir_name 8:trajectory_prefix
 
 Arguments:
     1:factory_np_filename: str
@@ -28,6 +27,8 @@ Arguments:
         directory name of trajectory cache
     8:trajectory_prefix : str
         prefix name of trajectory files written to write_dir_name
+    9:write_trajectory_interval : int, default 1
+        how often to write trajectory to disk
 """
 
 
@@ -40,6 +41,11 @@ number_of_applications = sys.argv[5]
 endstate_cache_filename = sys.argv[6]
 write_dir_name = sys.argv[7]
 trajectory_prefix = sys.argv[8]
+
+try:
+    write_trajectory_interval = int(sys.argv[9])
+except Exception as e:
+    write_trajectory_interval=1
 
 #extract the factory dictionary from a .npy file
 print(f"loading factory dict...")
@@ -92,6 +98,7 @@ works = annealed_importance_sampling(system = system,
                                                       'pressure': 1.0 * unit.atmosphere},
                                  save_indices = None,
                                  position_extractor = None #solvent_factory.new_positions
+                                 write_trajectory_write_trajectory_interval
                                 )
 
 save_to = os.path.join(os.getcwd(), write_dir_name, f"{trajectory_prefix}.works.npy")
