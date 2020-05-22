@@ -461,7 +461,7 @@ class Propagator(OMMBIP):
             self._current_state_works.append(self._current_state_works[-1] + (perturbed_reduced_potential - reduced_potential))
 
             #and create a new modified force
-            mm_force_matrix = self._compute_hybrid_forces(_lambda = (self._iteration + 1.0) / self._n_iterations, particle_state = particle_state).value_in_unit_system(unit.md_unit_system) #converting back to unitless kJ/(nm mol)
+            mm_force_matrix = self._compute_hybrid_forces(_lambda = (self._iteration + 1.0) / self._n_iterations, particle_state = particle_state).value_in_unit_system(unit.md_unit_system)
             self.integrator.setPerDofVariableByName('modified_force', mm_force_matrix)
         else:
             #we are done
@@ -506,7 +506,7 @@ class Propagator(OMMBIP):
         """
         # get the complex mm forces
         state = self.context.getState(getForces=True)
-        mm_force_matrix = state.getForces(asNumpy=True) # returns forces in kJ/(nm mol)
+        mm_force_matrix = state.getForces(asNumpy=True)
 
         # get the ligand mm forces
         subset_state = self.context_subset.getState(getForces=True)
@@ -514,17 +514,17 @@ class Propagator(OMMBIP):
 
         # get the ligand ani forces
         coords = self.particle_state_subset.positions
-        subset_ani_force_matrix, energie = self.ani_handler.calculate_force(coords) # returns force in kJ/(A mol)
-        #print(f"ani force matrix head: ",subset_ani_force_matrix[0])
+        subset_ani_force_matrix, energie = self.ani_handler.calculate_force(coords)
+        print(f"ani force matrix head: ",subset_ani_force_matrix[0])
 
         # now combine the ligand forces
-        subset_force_matrix = _lambda * (subset_ani_force_matrix - mm_force_matrix_subset) #we are adding two Quantities with different units, but they are compatible
-        #print(f"mm subset force matrix head", mm_force_matrix_subset[0])
+        subset_force_matrix = _lambda * (subset_ani_force_matrix - mm_force_matrix_subset)
+        print(f"mm subset force matrix head", mm_force_matrix_subset[0])
 
         # and append to the complex forces...
-        #print(f"mm force matrix head", mm_force_matrix[0])
-        mm_force_matrix[list(self._subset_indices_map.keys()), :] += subset_force_matrix #and same, here...
-        #print(f"mm force matrix head (after ani modification)", mm_force_matrix[0])
+        print(f"mm force matrix head", mm_force_matrix[0])
+        mm_force_matrix[list(self._subset_indices_map.keys()), :] += subset_force_matrix
+        print(f"mm force matrix head (after ani modification)", mm_force_matrix[0])
 
         return mm_force_matrix
 
