@@ -21,13 +21,15 @@ Arguments:
         number of annealing steps to run; instantaneous is 1
     5:number_of_applications: int
         number of annealing protocols to run
-    6:endstate_cache_filename: str
-        path to mdtraj loadable trajectory from which endstates will be extracted
+    6:endstate_positions_cache_filename: str
+        path to the .np position endstates that will be extracted
     7:write_dir_name : str
         directory name of trajectory cache
     8:trajectory_prefix : str
         prefix name of trajectory files written to write_dir_name
-    9:write_trajectory_interval : int, default 1
+    9:endstate_box_vectors_cache_filename : str
+        path to the .np box vectors that will be extracted
+    10:write_trajectory_interval : int, default 1
         how often to write trajectory to disk
 """
 
@@ -38,18 +40,20 @@ phase = sys.argv[2]
 endstate = sys.argv[3]
 steps_per_application = sys.argv[4]
 number_of_applications = sys.argv[5]
-endstate_cache_filename = sys.argv[6]
+endstate_positions_cache_filename = sys.argv[6]
 write_dir_name = sys.argv[7]
 trajectory_prefix = sys.argv[8]
+endstate_box_vectors_cache_filename=sys.argv[9]
 
 try:
-    write_trajectory_interval = int(sys.argv[9])
+    write_trajectory_interval = int(sys.argv[10])
 except Exception as e:
     write_trajectory_interval=1
 
-#extract the factory dictionary from a .npy file
+#extract the factory dictionary from a .npy.npz file
 print(f"loading factory dict...")
-factory_dict = np.load(factory_np_filename, allow_pickle=True).item()
+factory_dict = np.load(factory_np_filename, allow_pickle=True)
+factory_dict = factory_dict['arr_0'].flatten()[0]
 factory = factory_dict[phase]
 subset_factory = factory_dict['vacuum']
 
@@ -74,6 +78,8 @@ subset_mol_atoms = [atom for atom in subset_md_topology.atoms if atom.index in m
 
 mol_atom_dict = {i:j for i, j in zip(mol_indices, subset_mol_indices)} #mol atom dict is complex-to-vacuum indices
 
+save_indices = md_topology.select('not water')
+
 #print what was extracted:
 print(f"atom extractions...")
 print(f"\t(vacuum_atom, atom_in_environment)")
@@ -84,7 +90,7 @@ for subset_atom, atom in zip(subset_mol_atoms, mol_atoms):
 works = annealed_importance_sampling(system = system,
                                  system_subset = system_subset,
                                  subset_indices_map = mol_atom_dict,
-                                 endstate_cache_filename = endstate_cache_filename,
+                                 endstate_positions_cache_filename = endstate_positions_cache_filename,
                                  directory_name = write_dir_name,
                                  trajectory_prefix = trajectory_prefix,
                                  md_topology = md_topology,
@@ -96,9 +102,10 @@ works = annealed_importance_sampling(system = system,
                                                       'splitting': "V R O R F",
                                                       'constraint_tolerance': 1e-6,
                                                       'pressure': 1.0 * unit.atmosphere},
-                                 save_indices = None,
-                                 position_extractor = None #solvent_factory.new_positions
-                                 write_trajectory_write_trajectory_interval
+                                 save_indices = save_indices,
+                                 position_extractor = None, #solvent_factory.new_positions
+                                 write_trajectory_interval = write_trajectory_interval,
+                                 endstate_box_vectors_cache_filename = endstate_box_vectors_cache_filename
                                 )
 
 save_to = os.path.join(os.getcwd(), write_dir_name, f"{trajectory_prefix}.works.npy")

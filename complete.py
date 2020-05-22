@@ -562,7 +562,7 @@ class Propagator(OMMBIP):
 def annealed_importance_sampling(system,
                                  system_subset,
                                  subset_indices_map,
-                                 endstate_cache_filename,
+                                 endstate_positions_cache_filename,
                                  directory_name,
                                  trajectory_prefix,
                                  md_topology,
@@ -576,7 +576,8 @@ def annealed_importance_sampling(system,
                                                       'pressure': 1.0 * unit.atmosphere},
                                  save_indices = None,
                                  position_extractor = None,
-                                 write_trajectory_interval=1
+                                 write_trajectory_interval=1,
+                                 endstate_box_vectors_cache_filename = None
                                 ):
     """
     conduct annealed importance sampling in the openmm regime
@@ -588,8 +589,8 @@ def annealed_importance_sampling(system,
             subset system
         subset_indices_map : dict
             dict of {openmm_pdf_state atom_index : openmm_pdf_state_subset atom index}
-        endstate_cache_filename : str
-            path to the endstate cache pdb
+        endstate_positions_cache_filename : str
+            path to the endstate cache positions
         directory_name : str
             directory that will be written to
         trajectory_prefix : str
@@ -610,12 +611,21 @@ def annealed_importance_sampling(system,
             function to extract appropriate positons from the cache
         write_trajectory_interval : int
             frequency with which to write trajectory to disk
+        endstate_box_vectors_cache_filename : str, default None
+            .npy loadable string containing the box vectors
     """
     from coddiwomple.particles import Particle
     from coddiwomple.openmm.states import OpenMMParticleState, OpenMMPDFState
-    #load the endstate cache
-    traj = md.Trajectory.load(endstate_cache_filename)
-    num_frames = traj.n_frames
+    #load the endstate cache 
+    traj = np.load(endstate_positions_cache_filename)
+    num_frames = traj.shape[0]
+    if endstate_box_vectors_cache_filename is not None:
+        box_vectors = np.load(endstate_box_vectors_cache_filename)
+        num_box_frames = box_vectors.shape[0]
+        assert num_box_frames == num_frames, f"the number of box vector frames is not equal to the number of position frames"
+    else:
+        box_vectors = None
+
     print(f"loaded {num_frames} from the cache")
 
     #make a handle object for ANI
@@ -631,7 +641,8 @@ def annealed_importance_sampling(system,
     pdf_state_subset = ThermodynamicState(system = system_subset, temperature = integrator_kwargs['temperature'], pressure = None)
 
     #make a reporter
-    reporter = OpenMMReporter(directory_name, trajectory_prefix, md_topology, subset_indices = save_indices)
+    saveable_topology = md_topology.subset(save_indices)
+    reporter = OpenMMReporter(directory_name, trajectory_prefix, saveable_topology, subset_indices = save_indices)
 
 
     #make an integrator
@@ -649,15 +660,22 @@ def annealed_importance_sampling(system,
                  reporter = reporter,
                  write_trajectory_interval = write_trajectory_interval)
 
-    frames = np.random.choice(range(num_frames), number_of_applications)
+    #frames = np.random.choice(range(num_frames), number_of_applications)
+    frames = range(num_frames)
+    assert number_of_applications < num_frames, f"the number of applications is not less than the number of cached starting frames"
     particle = Particle(0)
 
     for i in tqdm.trange(number_of_applications):
+        _positions = traj[frames[i], :, :] * unit.nanometers
         if position_extractor is not None:
-            positions = position_extractor(traj.xyz[frames[i]] * unit.nanometers)
+            positions = position_extractor(_positions)
         else:
-            positions = traj.xyz[frames[i]] * unit.nanometers
-        particle_state = OpenMMParticleState(positions = positions, box_vectors = traj.unitcell_vectors[frames[i]]*unit.nanometers)
+            positions = _positions
+        if box_vectors is None:
+            bv = None
+        else:
+            bv = box_vectors[frames[i], :, :] * unit.nanometers
+        particle_state = OpenMMParticleState(positions = positions, box_vectors = bv)
         particle.update_state(particle_state)
         #try:
         _, _return_dict = propagator.apply(particle_state, n_steps = steps_per_application, reset_integrator=True, apply_pdf_to_context=True)
@@ -668,137 +686,3 @@ def annealed_importance_sampling(system,
     return propagator.state_works
 
 
-# In[ ]:
-
-
-#Example calculation: let's do benzene --> methylbenzene
-# from pkg_resources import resource_filename
-# import pickle
-# import mdtraj as md
-# solvent_factory_filename = resource_filename('coddiwomple', f"/data/perses_data/benzene_methylbenzene.solvent.factory.pkl")
-# vacuum_factory_filename = resource_filename('coddiwomple', f"/data/perses_data/benzene_methylbenzene.vacuum.factory.pkl")
-
-# with open(solvent_factory_filename, 'rb') as f:
-#     solvent_factory = pickle.load(f)
-
-# with open(vacuum_factory_filename, 'rb') as f:
-#     vacuum_factory = pickle.load(f)
-
-
-# system = solvent_factory._topology_proposal._new_system
-# system_subset = vacuum_factory._topology_proposal._new_system
-# subset_indices_map = {i:j for i, j in zip(range(1119, 1134), range(15))} #map for one endstate 'anisole'
-# endstate_cache_filename = '/mnt/c/Users/domin/github/codditest/1_endstate_cache/benzene_methylbenzene.solvent.0000.pdb'
-# directory_name = 'methylbenzene_solvent'
-# trajectory_prefix = 'troubleshoot'
-# md_topology = md.Topology.from_openmm(solvent_factory._topology_proposal._new_topology)
-
-
-# # In[ ]:
-
-
-# list(solvent_factory._topology_proposal._new_topology.atoms())[-20:]
-
-
-# # In[ ]:
-
-
-# list(vacuum_factory._topology_proposal._new_topology.atoms())
-
-
-# # In[ ]:
-
-
-# instantaneous_works = annealed_importance_sampling(system = system,
-#                                  system_subset = system_subset,
-#                                  subset_indices_map = subset_indices_map,
-#                                  endstate_cache_filename = endstate_cache_filename,
-#                                  directory_name = directory_name,
-#                                  trajectory_prefix = trajectory_prefix,
-#                                  md_topology = md_topology,
-#                                  number_of_applications = 50,
-#                                  steps_per_application = 1,
-#                                  integrator_kwargs = {'temperature': 300.0 * unit.kelvin,
-#                                                       'collision_rate': 1.0 / unit.picoseconds,
-#                                                       'timestep': 1.0 * unit.femtoseconds,
-#                                                       'splitting': "V R O R F",
-#                                                       'constraint_tolerance': 1e-6,
-#                                                       'pressure': 1.0 * unit.atmosphere},
-#                                  save_indices = None,
-#                                  position_extractor = solvent_factory.new_positions
-#                                 )
-
-
-# # In[ ]:
-
-
-# zehn_iteration_works = annealed_importance_sampling(system = system,
-#                                  system_subset = system_subset,
-#                                  subset_indices_map = subset_indices_map,
-#                                  endstate_cache_filename = endstate_cache_filename,
-#                                  directory_name = directory_name,
-#                                  trajectory_prefix = trajectory_prefix,
-#                                  md_topology = md_topology,
-#                                  number_of_applications = 50,
-#                                  steps_per_application = 10,
-#                                  integrator_kwargs = {'temperature': 300.0 * unit.kelvin,
-#                                                       'collision_rate': 1.0 / unit.picoseconds,
-#                                                       'timestep': 1.0 * unit.femtoseconds,
-#                                                       'splitting': "V R O R F",
-#                                                       'constraint_tolerance': 1e-6,
-#                                                       'pressure': 1.0 * unit.atmosphere},
-#                                  save_indices = None,
-#                                  position_extractor = solvent_factory.new_positions
-#                                 )
-
-
-# # In[ ]:
-
-
-# funfzig_iteration_works = annealed_importance_sampling(system = system,
-#                                  system_subset = system_subset,
-#                                  subset_indices_map = subset_indices_map,
-#                                  endstate_cache_filename = endstate_cache_filename,
-#                                  directory_name = directory_name,
-#                                  trajectory_prefix = trajectory_prefix,
-#                                  md_topology = md_topology,
-#                                  number_of_applications = 50,
-#                                  steps_per_application = 50,
-#                                  integrator_kwargs = {'temperature': 300.0 * unit.kelvin,
-#                                                       'collision_rate': 1.0 / unit.picoseconds,
-#                                                       'timestep': 1.0 * unit.femtoseconds,
-#                                                       'splitting': "V R O R F",
-#                                                       'constraint_tolerance': 1e-6,
-#                                                       'pressure': 1.0 * unit.atmosphere},
-#                                  save_indices = None,
-#                                  position_extractor = solvent_factory.new_positions
-#                                 )
-
-
-# # In[ ]:
-
-
-# get_ipython().run_line_magic('matplotlib', 'inline')
-
-# import matplotlib
-# import numpy as np
-# import matplotlib.pyplot as plt
-
-
-# # In[ ]:
-
-
-# inst_works = [val[-1] for val in instantaneous_works.values()]
-# plt.hist(inst_works)
-
-# _zehn_works = [val[-1] for val in zehn_iteration_works.values()]
-# plt.hist(_zehn_works)
-
-# _funfzig_works = [val[-1] for val in funfzig_iteration_works.values()]
-# plt.hist(_funfzig_works)
-# plt.xlabel(f"energie (kT)")
-# plt.ylabel(f"frequenz")
-# plt.title(f"Energie Verteilung")
-
-
-# # In[ ]:
