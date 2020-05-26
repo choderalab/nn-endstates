@@ -577,10 +577,11 @@ def annealed_importance_sampling(system,
                                  save_indices = None,
                                  position_extractor = None,
                                  write_trajectory_interval=1,
-                                 endstate_box_vectors_cache_filename = None
+                                 endstate_box_vectors_cache_filename = None,
+                                 write_work_dict=True
                                 ):
     """
-    conduct annealed importance sampling in the openmm regime
+    conduct annealed importance sampling in the openmm regime; will write the accumulated work dictionary after each application
 
     arguments
         system : openmm.System
@@ -613,6 +614,8 @@ def annealed_importance_sampling(system,
             frequency with which to write trajectory to disk
         endstate_box_vectors_cache_filename : str, default None
             .npy loadable string containing the box vectors
+        write_work_dict : bool, default True
+            whether to write the work dictionary after every application
     """
     from coddiwomple.particles import Particle
     from coddiwomple.openmm.states import OpenMMParticleState, OpenMMPDFState
@@ -665,6 +668,10 @@ def annealed_importance_sampling(system,
     assert number_of_applications < num_frames, f"the number of applications is not less than the number of cached starting frames"
     particle = Particle(0)
 
+    #define a save_to that saves the 
+    save_to = os.path.join(os.getcwd(), directory_name, f"{trajectory_prefix}.works.npy")
+
+
     for i in tqdm.trange(number_of_applications):
         _positions = traj[frames[i], :, :] * unit.nanometers
         if position_extractor is not None:
@@ -681,8 +688,12 @@ def annealed_importance_sampling(system,
         _, _return_dict = propagator.apply(particle_state, n_steps = steps_per_application, reset_integrator=True, apply_pdf_to_context=True)
         #except Exception as e:
         #    print(e)
-
-
+        
+        #save work dict to appropriate_file
+        if write_work_dict:
+            _works = propagator.state_works
+            np.save(save_to, np.array(_works))
+        
     return propagator.state_works
 
 
