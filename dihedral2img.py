@@ -28,16 +28,7 @@ from openeye import oedepict
 from openeye import oegrapheme
 
 
-def main(argv=[__name__]):
-
-    itf = oechem.OEInterface()
-    oechem.OEConfigure(itf, InterfaceData)
-    if not oechem.OEParseCommandLine(itf, argv):
-        return 1
-
-    iname = itf.GetString("-in")
-    oname = itf.GetString("-out")
-
+def setup(iname):
     ifs = oechem.oemolistream()
     if not ifs.open(iname):
         oechem.OEThrow.Fatal("Cannot open %s input file!" % iname)
@@ -48,13 +39,6 @@ def main(argv=[__name__]):
     if ifs.GetFormat() != oechem.OEFormat_OEB:
         ifs.SetConfTest(conftest)
 
-    ext = oechem.OEGetFileExtension(oname)
-    if not oedepict.OEIsRegisteredImageFile(ext):
-        oechem.OEThrow.Fatal("Unknown image type!")
-
-    ofs = oechem.oeofstream()
-    if not ofs.open(oname):
-        oechem.OEThrow.Fatal("Cannot open output file!")
 
     mol = oechem.OEMol()
     if not oechem.OEReadMolecule(ifs, mol):
@@ -65,26 +49,38 @@ def main(argv=[__name__]):
 
     if mol.NumConfs() == 1:
         oechem.OEThrow.Fatal("Multi conformations are required!")
+    return mol
 
-    mol2 = None
-    if itf.HasString("-in2"):
-        rname = itf.GetString("-in2")
-        ifs = oechem.oemolistream()
-        if not ifs.open(rname):
-            oechem.OEThrow.Fatal("Cannot open %s input file!" % rname)
-        mol2 = oechem.OEMol()
-        if not oechem.OEReadMolecule(ifs, mol2):
-            oechem.OEThrow.Fatal("Cannot read molecule from %s input file!" % rname)
+def main(argv=[__name__]):
 
-        for m in [mol, mol2]:
-            oechem.OESuppressHydrogens(m)
-            oechem.OECanonicalOrderAtoms(m)
-            oechem.OECanonicalOrderBonds(m)
-            m.Sweep()
 
-        if not conftest.CompareMols(mol, mol2):
-            oechem.OEThrow.Warning("Reference molecule is ignored!")
-            mol2 = None
+    itf = oechem.OEInterface()
+    oechem.OEConfigure(itf, InterfaceData)
+    if not oechem.OEParseCommandLine(itf, argv):
+        return 1
+
+    iname = itf.GetString("-in")
+    oname = itf.GetString("-out")
+    comp_mol = itf.GetString("-in2")
+
+    ext = oechem.OEGetFileExtension(oname)
+    if not oedepict.OEIsRegisteredImageFile(ext):
+        oechem.OEThrow.Fatal("Unknown image type!")
+
+    ofs = oechem.oeofstream()
+    if not ofs.open(oname):
+        oechem.OEThrow.Fatal("Cannot open output file!")
+
+
+    mol = setup(iname)
+    mol2 = setup(comp_mol)
+
+    for m in [mol, mol2]:
+        oechem.OESuppressHydrogens(m)
+        oechem.OECanonicalOrderAtoms(m)
+        oechem.OECanonicalOrderBonds(m)
+        m.Sweep()
+
 
     refmol = None
     if itf.HasString("-ref"):
@@ -112,7 +108,8 @@ def main(argv=[__name__]):
 
     nrbins = itf.GetInt("-nrbins")
 
-    mol2 = oechem.OEMol(mol)
+    print(mol.NumConfs())
+    print(mol2.NumConfs())
 
     get_dihedrals(mol, itag)
     set_dihedral_histograms(mol, itag, nrbins)
@@ -522,7 +519,7 @@ def draw_dihedral_histogram(image, histogram, histogram_ref, center, radius, nrb
 
     angleinc = 360.0 / float(nrbins)
 
-    valuepen = oedepict.OEPen(oechem.OERoyalBlue, oechem.OERoyalBlue, oedepict.OEFill_On, 2)
+    valuepen = oedepict.OEPen(oechem.OERoyalBlue, oechem.OERoyalBlue, oedepict.OEFill_On, 2.0)
 
     maxvalue = 0
     maxvalueidx = 0
