@@ -49,10 +49,19 @@ def main(argv=[__name__]):
 
   
     ## INPUT PARAMETERS
+    #########################################################
+    #########################################################
     dir_name =  'solvent_1000_steps'
     ligand_0_pdbs = [x for x in os.listdir(dir_name) if x[0:3] == 'new']
-    ###################
-    
+    d = np.load('full_data_dict.npy', allow_pickle=True)
+    key1 = (0, 2)
+    key2 = ('solvent', 'old')
+    #########################################################
+    #########################################################
+
+    d = d.flatten()[0]
+    work = d[key1][key2]
+
     print(ligand_0_pdbs)
     
     for i,pdb in enumerate(ligand_0_pdbs):
@@ -89,12 +98,7 @@ def main(argv=[__name__]):
     set_dihedral_histograms(mol, itag, nrbins)
 
     get_dihedrals(mol2, itag)
-    set_dihedral_histograms(mol2, itag, nrbins)
-
-
-    if refmol is not None:
-        get_dihedrals(refmol, itag)
-        set_dihedral(refmol, itag)
+    set_weighted_dihedral_histograms(mol2, itag, work, nrbins)
 
     width, height = 800, 400
     image = oedepict.OEImage(width, height)
@@ -236,6 +240,33 @@ def set_dihedral_histograms(mol, itag, nrbins):
 
         group.SetData(itag, histogram)
 
+def set_weighted_dihedral_histograms(mol, itag, work, nrbins):
+    """
+    Iterates over the dihedral groups and bins the torsional
+    angles for each conformation. The histogram data is then
+    attached to the groups with the given tag.
+
+    :type mol: oechem.OEMol
+    :type itag: int
+    :type nrbins: int
+    """
+
+    angleinc = 360.0 / float(nrbins)
+
+    for group in mol.GetGroups(oechem.OEHasGroupType(itag)):
+        atoms = oechem.OEAtomVector()
+        for atom in group.GetAtoms():
+            atoms.append(atom)
+        histogram = [0] * nrbins
+
+        for idx, conf in enumerate(mol.GetConfs()):
+            rad = oechem.OEGetTorsion(conf, atoms[0], atoms[1], atoms[2], atoms[3])
+            deg = math.degrees(rad)
+            deg = (deg + 360.0) % 360.0
+            binidx = int(math.floor((deg / angleinc)))
+            histogram[binidx] += np.exp(work[idx])
+
+        group.SetData(itag, histogram)
 
 def set_dihedral(mol, itag):
     """
