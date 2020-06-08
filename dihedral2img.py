@@ -26,42 +26,18 @@ import uuid
 from openeye import oechem
 from openeye import oedepict
 from openeye import oegrapheme
-
-
-def setup(iname):
-    ifs = oechem.oemolistream()
-    if not ifs.open(iname):
-        oechem.OEThrow.Fatal("Cannot open %s input file!" % iname)
-
-    comperate_title = True
-    conftest = oechem.OEIsomericConfTest(not comperate_title)
-
-    if ifs.GetFormat() != oechem.OEFormat_OEB:
-        ifs.SetConfTest(conftest)
-
-
-    mol = oechem.OEMol()
-    if not oechem.OEReadMolecule(ifs, mol):
-        oechem.OEThrow.Fatal("Cannot read molecule from %s input file!" % iname)
-
-    if mol.GetDimension() != 3:
-        oechem.OEThrow.Fatal("3D coordinates are requires!")
-
-    if mol.NumConfs() == 1:
-        oechem.OEThrow.Fatal("Multi conformations are required!")
-    return mol
+from perses.utils.openeye import *
+import os
+import tqdm
 
 def main(argv=[__name__]):
-
 
     itf = oechem.OEInterface()
     oechem.OEConfigure(itf, InterfaceData)
     if not oechem.OEParseCommandLine(itf, argv):
         return 1
 
-    iname = itf.GetString("-in")
     oname = itf.GetString("-out")
-    comp_mol = itf.GetString("-in2")
 
     ext = oechem.OEGetFileExtension(oname)
     if not oedepict.OEIsRegisteredImageFile(ext):
@@ -71,9 +47,26 @@ def main(argv=[__name__]):
     if not ofs.open(oname):
         oechem.OEThrow.Fatal("Cannot open output file!")
 
-
-    mol = setup(iname)
-    mol2 = setup(comp_mol)
+  
+    ## INPUT PARAMETERS
+    dir_name =  'solvent_1000_steps'
+    ligand_0_pdbs = [x for x in os.listdir(dir_name) if x[0:3] == 'new']
+    ###################
+    
+    print(ligand_0_pdbs)
+    
+    for i,pdb in enumerate(ligand_0_pdbs):
+        print(pdb)
+        if i == 0:
+            MM_mol = createOEMolFromSDF(f'{dir_name}/{pdb}', 0)
+            ANI_mol = createOEMolFromSDF(f'{dir_name}/{pdb}', 1)
+        else:
+            # there absolutely must be a better/faster way of doing this because this is ugly and slow
+            MM_mol.NewConf(createOEMolFromSDF(f'{dir_name}/{pdb}', 0))
+            ANI_mol.NewConf(createOEMolFromSDF(f'{dir_name}/{pdb}', 1))
+   
+    mol = MM_mol
+    mol2 = ANI_mol
 
     for m in [mol, mol2]:
         oechem.OESuppressHydrogens(m)
@@ -83,25 +76,6 @@ def main(argv=[__name__]):
 
 
     refmol = None
-    if itf.HasString("-ref"):
-
-        rname = itf.GetString("-ref")
-        ifs = oechem.oemolistream()
-        if not ifs.open(rname):
-            oechem.OEThrow.Fatal("Cannot open %s input file!" % rname)
-        refmol = oechem.OEMol()
-        if not oechem.OEReadMolecule(ifs, refmol):
-            oechem.OEThrow.Fatal("Cannot read molecule from %s input file!" % rname)
-
-        for m in [mol, refmol]:
-            oechem.OESuppressHydrogens(m)
-            oechem.OECanonicalOrderAtoms(m)
-            oechem.OECanonicalOrderBonds(m)
-            m.Sweep()
-
-        if not conftest.CompareMols(mol, refmol):
-            oechem.OEThrow.Warning("Reference molecule is ignored!")
-            refmol = None
 
     stag = "dihedral_histogram"
     itag = oechem.OEGetTag(stag)
@@ -353,10 +327,6 @@ def depict_dihedrals(image, dimage, mol1, mol2, refmol, opts, itag, nrbins, colo
         print(dihedral_histogram_ref)
         draw_dihedral_histogram(dimage, dihedral_histogram, dihedral_histogram_ref, center, radius, nrbins, nrconfs)
 
-        if refmol is not None and ref_dihedrals[didx] is not None:
-            ref_dihedral = ref_dihedrals[didx]
-            draw_reference_dihedral(dimage, ref_dihedral, itag, center, radius)
-
         image.PopGroup(dgroups[didx])
 
     clearbackground = True
@@ -488,6 +458,10 @@ def draw_dihedral_circle(image, center, radius, nrbins, nrconfs):
     font.SetSize(int(fontsize * 1.5))
     top = oedepict.OE2DPoint(image.GetWidth() / 2.0, - 10.0)
     image.DrawText(top, 'torsion histogram', font)
+    top = oedepict.OE2DPoint(image.GetWidth() / 2.0, - 30.0)
+
+    image.DrawText(top, 'MM: blue; ANI: red', font)
+
 
     bottom = oedepict.OE2DPoint(image.GetWidth() / 2.0, image.GetHeight() + 26.0)
     image.DrawText(bottom, 'number of conformations: {}'.format(nrconfs), font)
@@ -514,7 +488,7 @@ def draw_dihedral_histogram(image, histogram, histogram_ref, center, radius, nrb
     """
 
     minradius = radius / 3.0
-    maxvalue = max(histogram)
+    maxvalue = max(max(histogram), max(histogram_ref))
     radiusinc = (radius - minradius) / maxvalue
 
     angleinc = 360.0 / float(nrbins)
@@ -720,36 +694,11 @@ def determine_flexibility(histogram):
 InterfaceData = '''
 !CATEGORY "input/output options"
 
-    !PARAMETER -in
-      !ALIAS -i
-      !TYPE string
-      !REQUIRED true
-      !KEYLESS 1
-      !VISIBILITY simple
-      !BRIEF Input filename of a multi conformer molecule
-    !END
-
-    !PARAMETER -ref
-      !ALIAS -r
-      !TYPE string
-      !REQUIRED false
-      !VISIBILITY simple
-      !BRIEF Input filename of reference molecule
-    !END
-
-    !PARAMETER -in2
-      !ALIAS -m
-      !TYPE string
-      !REQUIRED false
-      !VISIBILITY simple
-      !BRIEF Input filename of reference molecule
-    !END
-
     !PARAMETER -out
       !ALIAS -o
       !TYPE string
       !REQUIRED true
-      !KEYLESS 2
+      !KEYLESS 1
       !VISIBILITY simple
       !BRIEF Output filename of the generated image
     !END
