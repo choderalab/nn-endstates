@@ -1,0 +1,85 @@
+<?xml version="1.0" ?>
+<System openmmVersion="7.4.2" type="System" version="1">
+	<PeriodicBoxVectors>
+		<A x="2" y="0" z="0"/>
+		<B x="0" y="2" z="0"/>
+		<C x="0" y="0" z="2"/>
+	</PeriodicBoxVectors>
+	<Particles>
+		<Particle mass="3.0340000000000007"/>
+		<Particle mass="14.01"/>
+		<Particle mass="16"/>
+		<Particle mass="16"/>
+		<Particle mass="4"/>
+		<Particle mass="4"/>
+		<Particle mass="4"/>
+	</Particles>
+	<Constraints/>
+	<Forces>
+		<Force forceGroup="0" type="HarmonicBondForce" usesPeriodic="0" version="2">
+			<Bonds>
+				<Bond d=".1533" k="172715.51999999996" p1="0" p2="1"/>
+				<Bond d=".1226" k="307858.7199999999" p1="1" p2="2"/>
+				<Bond d=".1226" k="307858.7199999999" p1="1" p2="3"/>
+				<Bond d=".1097" k="314553.11999999994" p1="0" p2="4"/>
+				<Bond d=".1097" k="314553.11999999994" p1="0" p2="5"/>
+				<Bond d=".1097" k="314553.11999999994" p1="0" p2="6"/>
+			</Bonds>
+		</Force>
+		<Force forceGroup="0" type="HarmonicAngleForce" usesPeriodic="0" version="2">
+			<Angles>
+				<Angle a="2.0408134943569696" k="698.7280000000001" p1="0" p2="1" p3="2"/>
+				<Angle a="2.0408134943569696" k="698.7280000000001" p1="0" p2="1" p3="3"/>
+				<Angle a="1.8407987620784194" k="502.08000000000004" p1="1" p2="0" p3="4"/>
+				<Angle a="1.8407987620784194" k="502.08000000000004" p1="1" p2="0" p3="5"/>
+				<Angle a="1.8407987620784194" k="502.08000000000004" p1="1" p2="0" p3="6"/>
+				<Angle a="2.1830578283945075" k="975.7088" p1="2" p2="1" p3="3"/>
+				<Angle a="1.8929841067130497" k="324.6784" p1="4" p2="0" p3="5"/>
+				<Angle a="1.8929841067130497" k="324.6784" p1="4" p2="0" p3="6"/>
+				<Angle a="1.8929841067130497" k="324.6784" p1="5" p2="0" p3="6"/>
+			</Angles>
+		</Force>
+		<Force forceGroup="0" type="PeriodicTorsionForce" usesPeriodic="0" version="2">
+			<Torsions>
+				<Torsion k="4.6024" p1="0" p2="2" p3="1" p4="3" periodicity="2" phase="3.141592653589793"/>
+			</Torsions>
+		</Force>
+		<Force alpha="0" cutoff="1" dispersionCorrection="1" ewaldTolerance=".0001" forceGroup="0" ljAlpha="0" ljnx="0" ljny="0" ljnz="0" method="0" nx="0" ny="0" nz="0" recipForceGroup="-1" rfDielectric="78.3" switchingDistance="-1" type="NonbondedForce" useSwitchingFunction="0" version="3">
+			<GlobalParameters/>
+			<ParticleOffsets/>
+			<ExceptionOffsets/>
+			<Particles>
+				<Particle eps=".4510352" q=".009238452924547558" sig=".3397709531243626"/>
+				<Particle eps=".3589872" q=".030761509215040284" sig=".336510263815969"/>
+				<Particle eps=".6121192000000001" q="-1.019999981069794" sig=".3048120874245357"/>
+				<Particle eps=".6121192000000001" q="-1.019999981069794" sig=".3048120874245357"/>
+				<Particle eps=".0870272" q="0" sig=".24219972551363267"/>
+				<Particle eps=".0870272" q="0" sig=".24219972551363267"/>
+				<Particle eps=".0870272" q="0" sig=".24219972551363267"/>
+			</Particles>
+			<Exceptions>
+				<Exception eps="0" p1="0" p2="1" q="0" sig="1"/>
+				<Exception eps="0" p1="0" p2="2" q="0" sig="1"/>
+				<Exception eps="0" p1="1" p2="2" q="0" sig="1"/>
+				<Exception eps="0" p1="0" p2="3" q="0" sig="1"/>
+				<Exception eps="0" p1="1" p2="3" q="0" sig="1"/>
+				<Exception eps="0" p1="2" p2="3" q="0" sig="1"/>
+				<Exception eps="0" p1="0" p2="4" q="0" sig="1"/>
+				<Exception eps="0" p1="1" p2="4" q="0" sig="1"/>
+				<Exception eps=".11540257800655929" p1="2" p2="4" q="-0" sig=".2735059064690842"/>
+				<Exception eps=".11540257800655929" p1="3" p2="4" q="-0" sig=".2735059064690842"/>
+				<Exception eps="0" p1="0" p2="5" q="0" sig="1"/>
+				<Exception eps="0" p1="1" p2="5" q="0" sig="1"/>
+				<Exception eps=".11540257800655929" p1="2" p2="5" q="-0" sig=".2735059064690842"/>
+				<Exception eps=".11540257800655929" p1="3" p2="5" q="-0" sig=".2735059064690842"/>
+				<Exception eps="0" p1="4" p2="5" q="0" sig="1"/>
+				<Exception eps="0" p1="0" p2="6" q="0" sig="1"/>
+				<Exception eps="0" p1="1" p2="6" q="0" sig="1"/>
+				<Exception eps=".11540257800655929" p1="2" p2="6" q="-0" sig=".2735059064690842"/>
+				<Exception eps=".11540257800655929" p1="3" p2="6" q="-0" sig=".2735059064690842"/>
+				<Exception eps="0" p1="4" p2="6" q="0" sig="1"/>
+				<Exception eps="0" p1="5" p2="6" q="0" sig="1"/>
+			</Exceptions>
+		</Force>
+	</Forces>
+</System>
