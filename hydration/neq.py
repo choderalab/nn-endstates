@@ -29,7 +29,7 @@ parser.add_argument(f"traj_work_file_prefix", help='prefix with which to write t
 parser.add_argument(f"write_trajectory_interval", help='interval with which to write trajectory output', type=int)
 args = parser.parse_args()
 
-sys.path.insert(1, f"/mnt/c/Users/domin/github/nn-endstates")
+sys.path.insert(1, f"/home/rufad/github/nn-endstates")
 from complete import *
 from local_loader import local_loader
 

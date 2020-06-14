@@ -26,7 +26,7 @@ parser.add_argument("number_steps", help='number of MD steps', type=int)
 parser.add_argument("out_npz", help='name of output file to write positions, box_vectors_filename')
 args = parser.parse_args()
 
-sys.path.insert(1, f"/mnt/c/Users/domin/github/nn-endstates")
+sys.path.insert(1, f"/home/rufad/github/nn-endstates")
 from complete import *
 from local_loader import local_loader
 
