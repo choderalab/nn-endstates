@@ -4859,6 +4859,6 @@
 				<Exception eps="0" p1="1173" p2="1174" q="0" sig="1"/>
 			</Exceptions>
 		</Force>
-		<Force forceGroup="0" frequency="50" pressure="1.01325" randomSeed="247773002" temperature="300" type="MonteCarloBarostat" version="1"/>
+		<Force forceGroup="0" frequency="50" pressure="1.01325" randomSeed="923680240" temperature="300" type="MonteCarloBarostat" version="1"/>
 	</Forces>
 </System>
