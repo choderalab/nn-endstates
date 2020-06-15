@@ -42,6 +42,10 @@ pressure = None if box_vectors is None else 1.0*unit.atmosphere
 thermostate = ThermodynamicState(system, temperature=300*unit.kelvin, pressure=pressure)
 sampler_state = SamplerState(positions) #no velocities yet
 
+#minimize
+from perses.dispersed.feptasks import minimize
+minimize(thermostate, sampler_state)
+
 #out loggers
 out_positions = []
 out_box_vectors = []

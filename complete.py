@@ -788,11 +788,11 @@ def annealed_importance_sampling(direction,
     particle = Particle(0)
     particle_state = OpenMMParticleState(positions = positions, box_vectors = box_vectors)
     particle.update_state(particle_state)
-    _, _return_dict = propagator.apply(particle_state, n_steps = steps_per_application, reset_integrator=True, apply_pdf_to_context=True)
+    particle_state, _return_dict = propagator.apply(particle_state, n_steps = steps_per_application, reset_integrator=True, apply_pdf_to_context=True)
 
 
 
-    return np.array(propagator.state_works[0])
+    return particle_state, np.array(propagator.state_works[0])
 
 def ANI_endstate_sampler(
                          system,
