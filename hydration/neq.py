@@ -57,7 +57,6 @@ particle_state, works = annealed_importance_sampling(direction=args.direction,
 if particle_state.box_vectors is None:
     np.savez(os.path.join(os.getcwd(), f"{args.traj_work_file_prefix}.neq_positions.npz"), positions = np.array([particle_state.positions.value_in_unit_system(unit.md_unit_system)]))
 else:
-    np.savez(os.path.join(os.getcwd(), f"{args.traj_work_file_prefix}.neq_positions.npz",  positions = np.array([particle_state.positions.value_in_unit_system(unit.md_unit_system)]), box_vectors = np.array([particle_state.box_vectors.value_in_unit_system(unit.md_unit_system)])))
-)
+    np.savez(os.path.join(os.getcwd(), f"{args.traj_work_file_prefix}.neq_positions.npz"),  positions = np.array([particle_state.positions.value_in_unit_system(unit.md_unit_system)]), box_vectors = np.array([particle_state.box_vectors.value_in_unit_system(unit.md_unit_system)]))
 
 np.savez(os.path.join(os.getcwd(), f"{args.traj_work_file_prefix}.works.npz"), works=works)
