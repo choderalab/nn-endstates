@@ -789,7 +789,8 @@ def annealed_importance_sampling(direction,
     particle_state = OpenMMParticleState(positions = positions, box_vectors = box_vectors)
     particle.update_state(particle_state)
     particle_state, _return_dict = propagator.apply(particle_state, n_steps = steps_per_application, reset_integrator=True, apply_pdf_to_context=True)
-
+    if box_vectors is None:
+        particle_state.box_vectors=None
 
 
     return particle_state, np.array(propagator.state_works[0])
@@ -875,6 +876,8 @@ def ANI_endstate_sampler(
     particle = Particle(0)
     particle_state = OpenMMParticleState(positions = positions, box_vectors = box_vectors)
     particle.update_state(particle_state)
-    _, _return_dict = propagator.apply(particle_state, n_steps = steps_per_application, reset_integrator=True, apply_pdf_to_context=True)
-
+    particle_state, _return_dict = propagator.apply(particle_state, n_steps = steps_per_application, reset_integrator=True, apply_pdf_to_context=True)
+    if box_vectors is None:
+        particle_state.box_vectors=None
+    
     return particle_state, np.array(propagator.state_works[0])
