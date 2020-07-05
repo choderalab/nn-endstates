@@ -687,7 +687,7 @@ def annealed_importance_sampling(direction,
                                  write_trajectory_interval=1
                                 ):
     """
-    conduct annealed importance sampling in the openmm regime
+    conduct annealed importance sampling in the openmm regime; will write the accumulated work dictionary after each application
 
     arguments
         direction : str
