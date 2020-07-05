@@ -106,9 +106,7 @@ works = annealed_importance_sampling(system = system,
                                  position_extractor = None, #solvent_factory.new_positions
                                  write_trajectory_interval = write_trajectory_interval,
                                  endstate_box_vectors_cache_filename = endstate_box_vectors_cache_filename
-                                )
+                                ) #write_work_dict is defaulted as True
 
-save_to = os.path.join(os.getcwd(), write_dir_name, f"{trajectory_prefix}.works.npy")
-np.save(save_to, np.array(works))
-print(f"successfully saved work array to {save_to}; terminating")
+print(f"successfully saved work array; terminating")
 
