@@ -739,9 +739,11 @@ def annealed_importance_sampling(direction,
     assert direction in ['forward', 'backward']
 
     #make a handle object for ANI
-    species_str = ''.join([atom.element.symbol for atom in md_topology.subset(list(subset_indices_map.keys())).atoms])
+    #species_str = ''.join([atom.element.symbol for atom in md_topology.subset(list(subset_indices_map.keys())).atoms])
+    species_str = [atom.element.symbol for atom in md_topology.subset(list(subset_indices_map.keys())).atoms]
+
     _logger.info(f"species string: {species_str}")
-    ani_handler = ANI1_force_and_energy(model = torchani.models.ANI1ccx(),
+    ani_handler = ANI1_force_and_energy(model = torchani.models.ANI2x(periodic_table_index=True),
                                                  atoms=species_str,
                                                  platform='cpu',
                                                  temperature=integrator_kwargs['temperature'])
@@ -847,7 +849,7 @@ def ANI_endstate_sampler(
 
     species_str = ''.join([atom.element.symbol for atom in md_topology.subset(list(subset_indices_map.keys())).atoms])
     _logger.info(f"species string: {species_str}")
-    ani_handler = ANI1_force_and_energy(model = torchani.models.ANI1ccx(),
+    ani_handler = ANI1_force_and_energy(model = torchani.models.ANI2x(periodic_table_index=True),
                                                  atoms=species_str,
                                                  platform='cpu',
                                                  temperature=integrator_kwargs['temperature'])
