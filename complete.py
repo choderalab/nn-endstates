@@ -743,7 +743,7 @@ def annealed_importance_sampling(direction,
     species_str = [atom.element.symbol for atom in md_topology.subset(list(subset_indices_map.keys())).atoms]
 
     _logger.info(f"species string: {species_str}")
-    ani_handler = ANI1_force_and_energy(model = torchani.models.ANI2x(periodic_table_index=True),
+    ani_handler = ANI1_force_and_energy(model = torchani.models.ANI2x(),
                                                  atoms=species_str,
                                                  platform='cpu',
                                                  temperature=integrator_kwargs['temperature'])
@@ -847,9 +847,9 @@ def ANI_endstate_sampler(
     except Exception as e:
         box_vectors = None
 
-    species_str = ''.join([atom.element.symbol for atom in md_topology.subset(list(subset_indices_map.keys())).atoms])
+    species_str = [atom.element.symbol for atom in md_topology.subset(list(subset_indices_map.keys())).atoms]
     _logger.info(f"species string: {species_str}")
-    ani_handler = ANI1_force_and_energy(model = torchani.models.ANI2x(periodic_table_index=True),
+    ani_handler = ANI1_force_and_energy(model = torchani.models.ANI2x(),
                                                  atoms=species_str,
                                                  platform='cpu',
                                                  temperature=integrator_kwargs['temperature'])
