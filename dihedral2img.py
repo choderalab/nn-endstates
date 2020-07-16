@@ -22,13 +22,15 @@
 
 import sys
 import math
+import glob
 import uuid
 from openeye import oechem
 from openeye import oedepict
 from openeye import oegrapheme
-from perses.utils.openeye import *
+from perses.utils.openeye import createOEMolFromSDF
 import os
 import tqdm
+import numpy as np
 
 def main(argv=[__name__]):
 
@@ -38,6 +40,7 @@ def main(argv=[__name__]):
         return 1
 
     oname = itf.GetString("-out")
+    iname = itf.GetString("-in")
 
     ext = oechem.OEGetFileExtension(oname)
     if not oedepict.OEIsRegisteredImageFile(ext):
@@ -51,28 +54,39 @@ def main(argv=[__name__]):
     ## INPUT PARAMETERS
     #########################################################
     #########################################################
-    dir_name =  'solvent_1000_steps'
-    ligand_0_pdbs = [x for x in os.listdir(dir_name) if x[0:3] == 'new']
-    d = np.load('full_data_dict.npy', allow_pickle=True)
-    key1 = (0, 2)
-    key2 = ('solvent', 'old')
+    mm = 'tyk2/og_pdbs'
+    qml = 'tyk2/forward_snapshots'
+    phase = 'solvent'
+    which_ligand = 'old'
+    dir_name = iname
+    ligand_pdbs_mm = glob.glob(f"{mm}/{dir_name}/{which_ligand}*{phase}.pdb")
+    print(len(ligand_pdbs_mm))
+    ligand_pdbs_qml = glob.glob(f"{qml}/{dir_name}/{which_ligand}*{phase}.pdb")
+    print(len(ligand_pdbs_qml))
+
+    #d = np.load('full_data_dict.npy', allow_pickle=True)
+    from_ligand, to_ligand = iname.replace('from', '').replace('to', '').replace('lig', '')
+    print(from_ligand)
+    print(to_ligand)
+    #key1 = (1, 8)
+    #key2 = ('solvent', which_ligand)
     #########################################################
     #########################################################
 
-    d = d.flatten()[0]
-    work = d[key1][key2]
+    #d = d.flatten()[0]
+    #work = d[key1][key2]
+    #print(work)
 
-    print(ligand_0_pdbs)
     
-    for i,pdb in enumerate(ligand_0_pdbs):
-        print(pdb)
+    for i, (mm_pdb_path, ani_pdb_path) in enumerate(zip(ligand_pdbs_mm, ligand_pdbs_qml)):
+        print(mm_pdb_path, ani_pdb_path)
         if i == 0:
-            MM_mol = createOEMolFromSDF(f'{dir_name}/{pdb}', 0)
-            ANI_mol = createOEMolFromSDF(f'{dir_name}/{pdb}', 1)
+            MM_mol = createOEMolFromSDF(mm_pdb_path, 0)
+            ANI_mol = createOEMolFromSDF(ani_pdb_path, 0)
         else:
             # there absolutely must be a better/faster way of doing this because this is ugly and slow
-            MM_mol.NewConf(createOEMolFromSDF(f'{dir_name}/{pdb}', 0))
-            ANI_mol.NewConf(createOEMolFromSDF(f'{dir_name}/{pdb}', 1))
+            MM_mol.NewConf(createOEMolFromSDF(mm_pdb_path, 0))
+            ANI_mol.NewConf(createOEMolFromSDF(ani_pdb_path, 0))
    
     mol = MM_mol
     mol2 = ANI_mol
@@ -98,7 +112,8 @@ def main(argv=[__name__]):
     set_dihedral_histograms(mol, itag, nrbins)
 
     get_dihedrals(mol2, itag)
-    set_weighted_dihedral_histograms(mol2, itag, work, nrbins)
+    #set_weighted_dihedral_histograms(mol2, itag, work, nrbins)
+    set_dihedral_histograms(mol2, itag, nrbins)
 
     width, height = 800, 400
     image = oedepict.OEImage(width, height)
@@ -238,7 +253,15 @@ def set_dihedral_histograms(mol, itag, nrbins):
             binidx = int(math.floor((deg / angleinc)))
             histogram[binidx] += 1
 
+        histogram = list(normalize(np.array(histogram)))
         group.SetData(itag, histogram)
+
+def normalize(v):
+    norm = np.linalg.norm(v)
+    if norm == 0: 
+        return v
+    return v / norm
+
 
 def set_weighted_dihedral_histograms(mol, itag, work, nrbins):
     """
@@ -251,7 +274,11 @@ def set_weighted_dihedral_histograms(mol, itag, work, nrbins):
     :type nrbins: int
     """
 
+
     angleinc = 360.0 / float(nrbins)
+
+    # scale and normalize
+    work = list(normalize(np.array(work) - min(work))) 
 
     for group in mol.GetGroups(oechem.OEHasGroupType(itag)):
         atoms = oechem.OEAtomVector()
@@ -264,6 +291,7 @@ def set_weighted_dihedral_histograms(mol, itag, work, nrbins):
             deg = math.degrees(rad)
             deg = (deg + 360.0) % 360.0
             binidx = int(math.floor((deg / angleinc)))
+            # instaed of 1 add the weight
             histogram[binidx] += np.exp(work[idx])
 
         group.SetData(itag, histogram)
@@ -582,7 +610,7 @@ def draw_dihedral_histogram(image, histogram, histogram_ref, center, radius, nrb
     v = oedepict.OE2DPoint(0.0, -1.0)
     pos = oedepict.OELengthenVector(oedepict.OERotateVector(v, angle), radius * 0.80)
     font.SetRotationAngle(textangle)
-    image.DrawText(center + pos, "{:.1f}%".format(percent), font)
+    image.DrawText(center + pos, "{:.1f}%".format(percent*100), font)
 
 
 def are_same_groups(agroup, bgroup):
@@ -725,11 +753,21 @@ def determine_flexibility(histogram):
 InterfaceData = '''
 !CATEGORY "input/output options"
 
-    !PARAMETER -out
+    !PARAMETER -in
       !ALIAS -o
       !TYPE string
       !REQUIRED true
       !KEYLESS 1
+      !VISIBILITY simple
+      !BRIEF Input filename for the system
+    !END
+
+
+    !PARAMETER -out
+      !ALIAS -o
+      !TYPE string
+      !REQUIRED true
+      !KEYLESS 2
       !VISIBILITY simple
       !BRIEF Output filename of the generated image
     !END
