@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"   viewBox="0.00 0.00 800.00 400.00">
+<!-- Created by OpenEye Scientific Software -->
+<!-- Creation Date Thu Jul 16 09:38:12 2020 -->
+<style type="text/css">
+.oedepict-hidden {
+ visibility: hidden;
+}
+
+.oedepict-visible {
+ visibility: visible;
+}
+
+.oedepict-hover:hover {
+ cursor: pointer;
+}
+
+</style>
+<script type="text/ecmascript"><![CDATA[
+
+document.addEventListener("DOMContentLoaded", init);
+
+function init() {
+		var group_torsion_area_7d4e0289b4ba4a25818a3e88ad1c32fb = document.querySelector('#torsion_area_7d4e0289b4ba4a25818a3e88ad1c32fb'); 
+
+		group_torsion_area_7d4e0289b4ba4a25818a3e88ad1c32fb.addEventListener('mouseover', mouseover_event_torsion_area_7d4e0289b4ba4a25818a3e88ad1c32fb);
+		group_torsion_area_7d4e0289b4ba4a25818a3e88ad1c32fb.addEventListener('mouseout', mouseout_event_torsion_area_7d4e0289b4ba4a25818a3e88ad1c32fb);
+
+		var group_torsion_area_08c103ba8fce44a6a372210e55d349c2 = document.querySelector('#torsion_area_08c103ba8fce44a6a372210e55d349c2'); 
+
+		group_torsion_area_08c103ba8fce44a6a372210e55d349c2.addEventListener('mouseover', mouseover_event_torsion_area_08c103ba8fce44a6a372210e55d349c2);
+		group_torsion_area_08c103ba8fce44a6a372210e55d349c2.addEventListener('mouseout', mouseout_event_torsion_area_08c103ba8fce44a6a372210e55d349c2);
+
+		var group_torsion_area_f7b9f62cd29047c887fb69e72dfa5225 = document.querySelector('#torsion_area_f7b9f62cd29047c887fb69e72dfa5225'); 
+
+		group_torsion_area_f7b9f62cd29047c887fb69e72dfa5225.addEventListener('mouseover', mouseover_event_torsion_area_f7b9f62cd29047c887fb69e72dfa5225);
+		group_torsion_area_f7b9f62cd29047c887fb69e72dfa5225.addEventListener('mouseout', mouseout_event_torsion_area_f7b9f62cd29047c887fb69e72dfa5225);
+
+		var group_torsion_area_a2a24e3a05d94e32b42c6a25c78a44bc = document.querySelector('#torsion_area_a2a24e3a05d94e32b42c6a25c78a44bc'); 
+
+		group_torsion_area_a2a24e3a05d94e32b42c6a25c78a44bc.addEventListener('mouseover', mouseover_event_torsion_area_a2a24e3a05d94e32b42c6a25c78a44bc);
+		group_torsion_area_a2a24e3a05d94e32b42c6a25c78a44bc.addEventListener('mouseout', mouseout_event_torsion_area_a2a24e3a05d94e32b42c6a25c78a44bc);
+
+		var group_torsion_area_5e4cfee1f1274d9191992e83865bc3d6 = document.querySelector('#torsion_area_5e4cfee1f1274d9191992e83865bc3d6'); 
+
+		group_torsion_area_5e4cfee1f1274d9191992e83865bc3d6.addEventListener('mouseover', mouseover_event_torsion_area_5e4cfee1f1274d9191992e83865bc3d6);
+		group_torsion_area_5e4cfee1f1274d9191992e83865bc3d6.addEventListener('mouseout', mouseout_event_torsion_area_5e4cfee1f1274d9191992e83865bc3d6);
+
+	}
+
+	function mouseover_event_torsion_area_7d4e0289b4ba4a25818a3e88ad1c32fb(evt) {
+	  // corresponds to group `torsion_area_7d4e0289b4ba4a25818a3e88ad1c32fb` 
+	  var svgobj = document.querySelector('#torsion_data_7d4e0289b4ba4a25818a3e88ad1c32fb');
+	  svgobj.classList.remove('oedepict-hidden');
+	  svgobj.classList.add('oedepict-visible');
+	}
+	function mouseout_event_torsion_area_7d4e0289b4ba4a25818a3e88ad1c32fb(evt) {
+	  // corresponds to group `torsion_area_7d4e0289b4ba4a25818a3e88ad1c32fb` 
+	  var svgobj = document.querySelector('#torsion_data_7d4e0289b4ba4a25818a3e88ad1c32fb');
+	  svgobj.classList.remove('oedepict-visible');
+	  svgobj.classList.add('oedepict-hidden');
+	}
+
+	function mouseover_event_torsion_area_08c103ba8fce44a6a372210e55d349c2(evt) {
+	  // corresponds to group `torsion_area_08c103ba8fce44a6a372210e55d349c2` 
+	  var svgobj = document.querySelector('#torsion_data_08c103ba8fce44a6a372210e55d349c2');
+	  svgobj.classList.remove('oedepict-hidden');
+	  svgobj.classList.add('oedepict-visible');
+	}
+	function mouseout_event_torsion_area_08c103ba8fce44a6a372210e55d349c2(evt) {
+	  // corresponds to group `torsion_area_08c103ba8fce44a6a372210e55d349c2` 
+	  var svgobj = document.querySelector('#torsion_data_08c103ba8fce44a6a372210e55d349c2');
+	  svgobj.classList.remove('oedepict-visible');
+	  svgobj.classList.add('oedepict-hidden');
+	}
+
+	function mouseover_event_torsion_area_f7b9f62cd29047c887fb69e72dfa5225(evt) {
+	  // corresponds to group `torsion_area_f7b9f62cd29047c887fb69e72dfa5225` 
+	  var svgobj = document.querySelector('#torsion_data_f7b9f62cd29047c887fb69e72dfa5225');
+	  svgobj.classList.remove('oedepict-hidden');
+	  svgobj.classList.add('oedepict-visible');
+	}
+	function mouseout_event_torsion_area_f7b9f62cd29047c887fb69e72dfa5225(evt) {
+	  // corresponds to group `torsion_area_f7b9f62cd29047c887fb69e72dfa5225` 
+	  var svgobj = document.querySelector('#torsion_data_f7b9f62cd29047c887fb69e72dfa5225');
+	  svgobj.classList.remove('oedepict-visible');
+	  svgobj.classList.add('oedepict-hidden');
+	}
+
+	function mouseover_event_torsion_area_a2a24e3a05d94e32b42c6a25c78a44bc(evt) {
+	  // corresponds to group `torsion_area_a2a24e3a05d94e32b42c6a25c78a44bc` 
+	  var svgobj = document.querySelector('#torsion_data_a2a24e3a05d94e32b42c6a25c78a44bc');
+	  svgobj.classList.remove('oedepict-hidden');
+	  svgobj.classList.add('oedepict-visible');
+	}
+	function mouseout_event_torsion_area_a2a24e3a05d94e32b42c6a25c78a44bc(evt) {
+	  // corresponds to group `torsion_area_a2a24e3a05d94e32b42c6a25c78a44bc` 
+	  var svgobj = document.querySelector('#torsion_data_a2a24e3a05d94e32b42c6a25c78a44bc');
+	  svgobj.classList.remove('oedepict-visible');
+	  svgobj.classList.add('oedepict-hidden');
+	}
+
+	function mouseover_event_torsion_area_5e4cfee1f1274d9191992e83865bc3d6(evt) {
+	  // corresponds to group `torsion_area_5e4cfee1f1274d9191992e83865bc3d6` 
+	  var svgobj = document.querySelector('#torsion_data_5e4cfee1f1274d9191992e83865bc3d6');
+	  svgobj.classList.remove('oedepict-hidden');
+	  svgobj.classList.add('oedepict-visible');
+	}
+	function mouseout_event_torsion_area_5e4cfee1f1274d9191992e83865bc3d6(evt) {
+	  // corresponds to group `torsion_area_5e4cfee1f1274d9191992e83865bc3d6` 
+	  var svgobj = document.querySelector('#torsion_data_5e4cfee1f1274d9191992e83865bc3d6');
+	  svgobj.classList.remove('oedepict-visible');
+	  svgobj.classList.add('oedepict-hidden');
+	}
+
+]]>
+ </script>
+<rect width="800.00" height="400.00" fill="white" />
+<circle cx="680.00" cy="220.00" r="80.00" fill="#d2d2d2" stroke="#d2d2d2" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="680.00" y1="220.00" x2="680.00" y2="140.00" stroke="#dcdcdc" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="680.00" y1="220.00" x2="700.71" y2="142.73" stroke="#dcdcdc" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="680.00" y1="220.00" x2="720.00" y2="150.72" stroke="#dcdcdc" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="680.00" y1="220.00" x2="736.57" y2="163.43" stroke="#dcdcdc" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="680.00" y1="220.00" x2="749.28" y2="180.00" stroke="#dcdcdc" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="680.00" y1="220.00" x2="757.27" y2="199.29" stroke="#dcdcdc" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="680.00" y1="220.00" x2="760.00" y2="220.00" stroke="#dcdcdc" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="680.00" y1="220.00" x2="757.27" y2="240.71" stroke="#dcdcdc" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="680.00" y1="220.00" x2="749.28" y2="260.00" stroke="#dcdcdc" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="680.00" y1="220.00" x2="736.57" y2="276.57" stroke="#dcdcdc" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="680.00" y1="220.00" x2="720.00" y2="289.28" stroke="#dcdcdc" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="680.00" y1="220.00" x2="700.71" y2="297.27" stroke="#dcdcdc" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="680.00" y1="220.00" x2="680.00" y2="300.00" stroke="#dcdcdc" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="680.00" y1="220.00" x2="659.29" y2="297.27" stroke="#dcdcdc" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="680.00" y1="220.00" x2="640.00" y2="289.28" stroke="#dcdcdc" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="680.00" y1="220.00" x2="623.43" y2="276.57" stroke="#dcdcdc" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="680.00" y1="220.00" x2="610.72" y2="260.00" stroke="#dcdcdc" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="680.00" y1="220.00" x2="602.73" y2="240.71" stroke="#dcdcdc" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="680.00" y1="220.00" x2="600.00" y2="220.00" stroke="#dcdcdc" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="680.00" y1="220.00" x2="602.73" y2="199.29" stroke="#dcdcdc" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="680.00" y1="220.00" x2="610.72" y2="180.00" stroke="#dcdcdc" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="680.00" y1="220.00" x2="623.43" y2="163.43" stroke="#dcdcdc" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="680.00" y1="220.00" x2="640.00" y2="150.72" stroke="#dcdcdc" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="680.00" y1="220.00" x2="659.29" y2="142.73" stroke="#dcdcdc" stroke-linejoin="round" stroke-linecap="round" />
+<text x="680.00" y="126.67" fill="black" font-family="Arial" font-size="8" font-style="normal" font-weight="bold" text-anchor="middle">  0.0 </text>
+<text x="776.00" y="222.67" fill="black" font-family="Arial" font-size="8" font-style="normal" font-weight="bold" text-anchor="middle">  90.0 </text>
+<text x="680.00" y="318.67" fill="black" font-family="Arial" font-size="8" font-style="normal" font-weight="bold" text-anchor="middle">  180.0 </text>
+<text x="584.00" y="222.67" fill="black" font-family="Arial" font-size="8" font-style="normal" font-weight="bold" text-anchor="middle">  270.0 </text>
+<circle cx="680.00" cy="220.00" r="26.67" fill="white" />
+<text x="680.00" y="110.00" fill="black" font-family="Arial" font-size="12" font-style="normal" font-weight="bold" text-anchor="middle">  torsion histogram </text>
+<text x="680.00" y="90.00" fill="black" font-family="Arial" font-size="12" font-style="normal" font-weight="bold" text-anchor="middle">  MM: blue; ANI: red </text>
+<text x="680.00" y="346.00" fill="black" font-family="Arial" font-size="12" font-style="normal" font-weight="bold" text-anchor="middle">  number of conformations: 100 </text>
+<g id='torsion_data_7d4e0289b4ba4a25818a3e88ad1c32fb' class='oedepict-hidden'>
+<line x1="293.88" y1="220.66" x2="331.23" y2="242.23" stroke="#afd6ff" stroke-width="21" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="293.88" y1="177.53" x2="293.88" y2="220.66" stroke="#afd6ff" stroke-width="21" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="331.30" y1="156.07" x2="293.88" y2="177.53" stroke="#afd6ff" stroke-width="21" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 680.00 154.48 A 65.52 65.52 0 0 1 696.96 156.71 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 695.95 160.47 A 61.63 61.63 0 0 1 710.82 166.62 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 718.59 153.17 A 77.17 77.17 0 0 1 734.57 165.43 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 707.10 192.90 A 38.32 38.32 0 0 1 713.19 200.84 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 709.82 202.78 A 34.44 34.44 0 0 1 713.26 211.09 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 713.26 211.09 A 34.44 34.44 0 0 1 714.44 220.00 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 713.26 228.91 A 34.44 34.44 0 0 1 709.82 237.22 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 713.19 239.16 A 38.32 38.32 0 0 1 707.10 247.10 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 707.10 247.10 A 38.32 38.32 0 0 1 699.16 253.19 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 701.10 256.55 A 42.21 42.21 0 0 1 690.92 260.77 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 693.94 272.03 A 53.86 53.86 0 0 1 680.00 273.86 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 680.00 262.21 A 42.21 42.21 0 0 1 669.08 260.77 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 666.06 272.03 A 53.86 53.86 0 0 1 653.07 266.65 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 662.78 249.82 A 34.44 34.44 0 0 1 655.65 244.35 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 658.40 241.60 A 30.55 30.55 0 0 1 653.54 235.28 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 646.74 211.09 A 34.44 34.44 0 0 1 650.18 202.78 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 653.54 204.72 A 30.55 30.55 0 0 1 658.40 198.40 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 641.91 181.91 A 53.86 53.86 0 0 1 653.07 173.35 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 645.30 159.89 A 69.40 69.40 0 0 1 662.04 152.96 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 666.06 167.97 A 53.86 53.86 0 0 1 680.00 166.14 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 680.00 170.48 A 49.52 49.52 0 0 1 692.82 172.16 z"  fill="none" stroke="red" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 696.76 157.44 A 64.76 64.76 0 0 1 712.38 163.91 z"  fill="none" stroke="red" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 708.57 170.51 A 57.14 57.14 0 0 1 720.41 179.59 z"  fill="none" stroke="red" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 709.63 190.37 A 41.90 41.90 0 0 1 716.29 199.05 z"  fill="none" stroke="red" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 709.69 202.86 A 34.29 34.29 0 0 1 713.12 211.13 z"  fill="none" stroke="red" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 709.63 249.63 A 41.90 41.90 0 0 1 700.95 256.29 z"  fill="none" stroke="red" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 704.76 262.89 A 49.52 49.52 0 0 1 692.82 267.84 z"  fill="none" stroke="red" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 694.79 275.20 A 57.14 57.14 0 0 1 680.00 277.14 z"  fill="none" stroke="red" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 680.00 300.00 A 80.00 80.00 0 0 1 659.29 297.27 z"  fill="none" stroke="red" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 667.18 267.84 A 49.52 49.52 0 0 1 655.24 262.89 z"  fill="none" stroke="red" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 660.95 252.99 A 38.10 38.10 0 0 1 653.06 246.94 z"  fill="none" stroke="red" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 658.45 241.55 A 30.48 30.48 0 0 1 653.61 235.24 z"  fill="none" stroke="red" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 650.31 237.14 A 34.29 34.29 0 0 1 646.88 228.87 z"  fill="none" stroke="red" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 649.52 220.00 A 30.48 30.48 0 0 1 650.56 212.11 z"  fill="none" stroke="red" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 653.61 204.76 A 30.48 30.48 0 0 1 658.45 198.45 z"  fill="none" stroke="red" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 639.59 179.59 A 57.14 57.14 0 0 1 651.43 170.51 z"  fill="none" stroke="red" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 649.52 167.21 A 60.95 60.95 0 0 1 664.22 161.12 z"  fill="none" stroke="red" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 666.20 168.48 A 53.33 53.33 0 0 1 680.00 166.67 z"  fill="none" stroke="red" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<circle cx="680.00" cy="220.00" r="26.67" fill="white" />
+<text x="674.98" y="283.80" fill="white" font-family="Arial" font-size="8" font-style="normal" font-weight="bold" text-anchor="middle" transform="rotate(-85.50,674.98,283.80)">  50.2% </text>
+</g>
+<g id='torsion_data_08c103ba8fce44a6a372210e55d349c2' class='oedepict-hidden'>
+<line x1="219.04" y1="91.25" x2="181.75" y2="112.93" stroke="#afd6ff" stroke-width="21" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="219.04" y1="91.25" x2="256.46" y2="112.71" stroke="#afd6ff" stroke-width="21" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="256.46" y1="112.71" x2="256.46" y2="156.07" stroke="#afd6ff" stroke-width="21" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 680.00 179.82 A 40.18 40.18 0 0 1 690.40 181.19 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 693.90 168.13 A 53.69 53.69 0 0 1 706.85 173.50 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 711.92 164.72 A 63.83 63.83 0 0 1 725.13 174.87 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 720.36 179.64 A 57.07 57.07 0 0 1 729.43 191.46 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 711.87 201.60 A 36.80 36.80 0 0 1 715.55 210.47 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 718.81 209.60 A 40.18 40.18 0 0 1 720.18 220.00 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 713.42 220.00 A 33.42 33.42 0 0 1 712.28 228.65 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 709.02 227.78 A 30.05 30.05 0 0 1 706.02 235.02 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 708.95 236.71 A 33.42 33.42 0 0 1 703.63 243.63 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 703.63 243.63 A 33.42 33.42 0 0 1 696.71 248.95 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 700.09 254.80 A 40.18 40.18 0 0 1 690.40 258.81 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 690.40 258.81 A 40.18 40.18 0 0 1 680.00 260.18 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 680.00 266.94 A 46.94 46.94 0 0 1 667.85 265.34 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 670.47 255.55 A 36.80 36.80 0 0 1 661.60 251.87 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 654.84 263.58 A 50.32 50.32 0 0 1 644.42 255.58 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 658.75 241.25 A 30.05 30.05 0 0 1 653.98 235.02 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 650.98 227.78 A 30.05 30.05 0 0 1 649.95 220.00 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 646.58 220.00 A 33.42 33.42 0 0 1 647.72 211.35 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 644.45 210.47 A 36.80 36.80 0 0 1 648.13 201.60 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 618.87 184.71 A 70.59 70.59 0 0 1 630.09 170.09 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 644.42 184.42 A 50.32 50.32 0 0 1 654.84 176.42 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 664.98 193.98 A 30.05 30.05 0 0 1 672.22 190.98 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 671.35 187.72 A 33.42 33.42 0 0 1 680.00 186.58 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 680.00 140.00 A 80.00 80.00 0 0 1 700.71 142.73 z"  fill="none" stroke="red" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 695.30 162.88 A 59.13 59.13 0 0 1 709.57 168.79 z"  fill="none" stroke="red" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 697.97 188.87 A 35.94 35.94 0 0 1 705.41 194.59 z"  fill="none" stroke="red" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 705.10 205.51 A 28.99 28.99 0 0 1 708.00 212.50 z"  fill="none" stroke="red" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 705.10 234.49 A 28.99 28.99 0 0 1 700.50 240.50 z"  fill="none" stroke="red" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 700.50 240.50 A 28.99 28.99 0 0 1 694.49 245.10 z"  fill="none" stroke="red" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 695.65 247.11 A 31.30 31.30 0 0 1 688.10 250.24 z"  fill="none" stroke="red" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 687.50 248.00 A 28.99 28.99 0 0 1 680.00 248.99 z"  fill="none" stroke="red" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 680.00 260.58 A 40.58 40.58 0 0 1 669.50 259.20 z"  fill="none" stroke="red" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 670.10 256.96 A 38.26 38.26 0 0 1 660.87 253.13 z"  fill="none" stroke="red" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 663.19 249.12 A 33.62 33.62 0 0 1 656.22 243.78 z"  fill="none" stroke="red" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 654.59 194.59 A 35.94 35.94 0 0 1 662.03 188.87 z"  fill="none" stroke="red" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 648.12 164.78 A 63.77 63.77 0 0 1 663.50 158.40 z"  fill="none" stroke="red" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 661.70 151.69 A 70.72 70.72 0 0 1 680.00 149.28 z"  fill="none" stroke="red" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<circle cx="680.00" cy="220.00" r="26.67" fill="white" />
+<text x="691.66" y="157.07" fill="white" font-family="Arial" font-size="8" font-style="normal" font-weight="bold" text-anchor="middle" transform="rotate(-79.50,691.66,157.07)">  60.4% </text>
+</g>
+<g id='torsion_data_f7b9f62cd29047c887fb69e72dfa5225' class='oedepict-hidden'>
+<line x1="293.88" y1="220.66" x2="331.23" y2="242.23" stroke="#afd6ff" stroke-width="21" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="331.23" y1="242.23" x2="331.23" y2="285.36" stroke="#afd6ff" stroke-width="21" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="331.23" y1="285.36" x2="368.65" y2="307.26" stroke="#afd6ff" stroke-width="21" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 655.25 244.75 A 35.00 35.00 0 0 1 649.69 237.50 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 610.72 260.00 A 80.00 80.00 0 0 1 602.73 240.71 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 622.04 235.53 A 60.00 60.00 0 0 1 620.00 220.00 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 618.33 220.00 A 61.67 61.67 0 0 1 620.43 204.04 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 628.48 206.20 A 53.33 53.33 0 0 1 633.81 193.33 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 649.69 202.50 A 35.00 35.00 0 0 1 655.25 195.25 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 659.97 199.97 A 28.33 28.33 0 0 1 665.83 195.46 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 665.74 244.69 A 28.51 28.51 0 0 1 659.84 240.16 z"  fill="none" stroke="red" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 641.57 258.43 A 54.34 54.34 0 0 1 632.94 247.17 z"  fill="none" stroke="red" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 620.15 254.55 A 69.11 69.11 0 0 1 613.25 237.89 z"  fill="none" stroke="red" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 615.03 237.41 A 67.26 67.26 0 0 1 612.74 220.00 z"  fill="none" stroke="red" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 627.50 220.00 A 52.50 52.50 0 0 1 629.29 206.41 z"  fill="none" stroke="red" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 625.72 205.46 A 56.19 56.19 0 0 1 631.34 191.90 z"  fill="none" stroke="red" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 642.52 198.36 A 43.27 43.27 0 0 1 649.40 189.40 z"  fill="none" stroke="red" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<circle cx="680.00" cy="220.00" r="26.67" fill="white" />
+<text x="622.23" y="247.55" fill="white" font-family="Arial" font-size="8" font-style="normal" font-weight="bold" text-anchor="middle" transform="rotate(-25.50,622.23,247.55)">  68.7% </text>
+</g>
+<g id='torsion_data_a2a24e3a05d94e32b42c6a25c78a44bc' class='oedepict-hidden'>
+<line x1="219.04" y1="91.25" x2="256.46" y2="112.71" stroke="#afd6ff" stroke-width="21" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="219.04" y1="91.25" x2="181.75" y2="112.93" stroke="#afd6ff" stroke-width="21" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="144.33" y1="91.47" x2="181.75" y2="112.93" stroke="#afd6ff" stroke-width="21" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 680.00 191.52 A 28.48 28.48 0 0 1 687.37 192.49 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 700.14 199.86 A 28.48 28.48 0 0 1 704.67 205.76 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 707.51 227.37 A 28.48 28.48 0 0 1 704.67 234.24 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 706.24 235.15 A 30.30 30.30 0 0 1 701.42 241.42 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 705.27 245.27 A 35.74 35.74 0 0 1 697.87 250.96 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 706.04 265.11 A 52.08 52.08 0 0 1 693.48 270.31 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 700.06 294.86 A 77.50 77.50 0 0 1 680.00 297.50 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 680.00 281.16 A 61.16 61.16 0 0 1 664.17 279.08 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 663.70 280.83 A 62.98 62.98 0 0 1 648.51 274.54 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 659.40 255.67 A 41.19 41.19 0 0 1 650.87 249.13 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 659.86 240.14 A 28.48 28.48 0 0 1 655.33 234.24 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 680.00 190.20 A 29.80 29.80 0 0 1 687.71 191.21 z"  fill="none" stroke="red" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 687.31 192.73 A 28.24 28.24 0 0 1 694.12 195.55 z"  fill="none" stroke="red" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 701.07 241.07 A 29.80 29.80 0 0 1 694.90 245.81 z"  fill="none" stroke="red" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 699.61 253.96 A 39.22 39.22 0 0 1 690.15 257.88 z"  fill="none" stroke="red" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 699.89 294.24 A 76.86 76.86 0 0 1 680.00 296.86 z"  fill="none" stroke="red" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 680.00 300.00 A 80.00 80.00 0 0 1 659.29 297.27 z"  fill="none" stroke="red" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 667.41 266.97 A 48.63 48.63 0 0 1 655.69 262.11 z"  fill="none" stroke="red" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 665.10 245.81 A 29.80 29.80 0 0 1 658.93 241.07 z"  fill="none" stroke="red" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 660.03 200.03 A 28.24 28.24 0 0 1 665.88 195.55 z"  fill="none" stroke="red" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 665.10 194.19 A 29.80 29.80 0 0 1 672.29 191.21 z"  fill="none" stroke="red" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 672.29 191.21 A 29.80 29.80 0 0 1 680.00 190.20 z"  fill="none" stroke="red" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<circle cx="680.00" cy="220.00" r="26.67" fill="white" />
+<text x="674.98" y="283.80" fill="white" font-family="Arial" font-size="8" font-style="normal" font-weight="bold" text-anchor="middle" transform="rotate(-85.50,674.98,283.80)">  68.5% </text>
+</g>
+<g id='torsion_data_5e4cfee1f1274d9191992e83865bc3d6' class='oedepict-hidden'>
+<line x1="331.23" y1="242.23" x2="331.23" y2="285.36" stroke="#afd6ff" stroke-width="21" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="293.88" y1="220.66" x2="331.23" y2="242.23" stroke="#afd6ff" stroke-width="21" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="293.88" y1="177.53" x2="293.88" y2="220.66" stroke="#afd6ff" stroke-width="21" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 704.70 234.26 A 28.52 28.52 0 0 1 700.17 240.17 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 705.41 245.41 A 35.93 35.93 0 0 1 697.97 251.12 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 709.09 270.38 A 58.18 58.18 0 0 1 695.06 276.19 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 695.06 276.19 A 58.18 58.18 0 0 1 680.00 278.18 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 680.00 296.71 A 76.71 76.71 0 0 1 660.15 294.10 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 662.54 285.15 A 67.44 67.44 0 0 1 646.28 278.41 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 657.40 259.15 A 45.20 45.20 0 0 1 648.04 251.96 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 655.30 234.26 A 28.52 28.52 0 0 1 652.45 227.38 z"  fill="#4747b8" stroke="#4747b8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 699.97 239.97 A 28.24 28.24 0 0 1 694.12 244.45 z"  fill="none" stroke="red" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 703.53 260.75 A 47.06 47.06 0 0 1 692.18 265.46 z"  fill="none" stroke="red" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 699.89 294.24 A 76.86 76.86 0 0 1 680.00 296.86 z"  fill="none" stroke="red" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 680.00 300.00 A 80.00 80.00 0 0 1 659.29 297.27 z"  fill="none" stroke="red" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 665.79 273.03 A 54.90 54.90 0 0 1 652.55 267.55 z"  fill="none" stroke="red" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<path d = "M 680.00 220.00 L 665.10 245.81 A 29.80 29.80 0 0 1 658.93 241.07 z"  fill="none" stroke="red" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<circle cx="680.00" cy="220.00" r="26.67" fill="white" />
+<text x="674.98" y="283.80" fill="white" font-family="Arial" font-size="8" font-style="normal" font-weight="bold" text-anchor="middle" transform="rotate(-85.50,674.98,283.80)">  65.7% </text>
+</g>
+<line x1="144.33" y1="91.47" x2="181.75" y2="112.93" stroke="black" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="368.65" y1="350.62" x2="331.23" y2="372.08" stroke="black" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="293.81" y1="350.62" x2="331.23" y2="372.08" stroke="black" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="303.73" y1="347.20" x2="329.18" y2="361.80" stroke="black" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="368.65" y1="307.26" x2="368.65" y2="350.62" stroke="black" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="360.75" y1="314.20" x2="360.75" y2="343.69" stroke="black" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="293.81" y1="307.26" x2="293.81" y2="350.62" stroke="black" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="331.30" y1="112.71" x2="331.30" y2="156.07" stroke="black" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="323.40" y1="119.64" x2="323.40" y2="149.13" stroke="black" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="331.30" y1="156.07" x2="293.88" y2="177.53" stroke="black" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="312.59" y1="101.76" x2="302.67" y2="95.95" stroke="blue" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="312.59" y1="101.76" x2="331.30" y2="112.71" stroke="black" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="256.46" y1="156.07" x2="293.88" y2="177.53" stroke="black" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="266.38" y1="152.65" x2="291.82" y2="167.24" stroke="black" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="256.46" y1="112.71" x2="256.46" y2="156.07" stroke="black" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="293.88" y1="199.09" x2="293.88" y2="177.53" stroke="black" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="293.88" y1="199.09" x2="293.88" y2="210.47" stroke="blue" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="331.23" y1="285.36" x2="368.65" y2="307.26" stroke="black" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="387.36" y1="296.54" x2="394.59" y2="292.39" stroke="#82d700" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="387.36" y1="296.54" x2="368.65" y2="307.26" stroke="black" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="331.23" y1="285.36" x2="293.81" y2="307.26" stroke="black" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="329.24" y1="295.69" x2="303.79" y2="310.58" stroke="black" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="275.10" y1="296.54" x2="267.87" y2="292.39" stroke="#82d700" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="275.10" y1="296.54" x2="293.81" y2="307.26" stroke="black" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="275.17" y1="101.76" x2="285.08" y2="95.95" stroke="blue" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="275.17" y1="101.76" x2="256.46" y2="112.71" stroke="black" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="279.16" y1="108.58" x2="291.88" y2="101.13" stroke="blue" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="279.16" y1="108.58" x2="266.44" y2="116.02" stroke="black" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="237.75" y1="101.98" x2="227.88" y2="96.32" stroke="blue" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="237.75" y1="101.98" x2="256.46" y2="112.71" stroke="black" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="331.23" y1="242.23" x2="331.23" y2="285.36" stroke="black" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="200.39" y1="102.09" x2="210.23" y2="96.37" stroke="blue" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="200.39" y1="102.09" x2="181.75" y2="112.93" stroke="black" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="177.86" y1="134.51" x2="177.80" y2="112.94" stroke="black" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="177.86" y1="134.51" x2="177.89" y2="144.36" stroke="red" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="185.76" y1="134.48" x2="185.70" y2="112.92" stroke="black" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="185.76" y1="134.48" x2="185.79" y2="144.34" stroke="red" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="312.56" y1="231.45" x2="302.70" y2="225.76" stroke="blue" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="312.56" y1="231.45" x2="331.23" y2="242.23" stroke="black" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="347.94" y1="228.02" x2="356.47" y2="223.10" stroke="red" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="347.94" y1="228.02" x2="329.26" y2="238.81" stroke="black" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="351.89" y1="234.87" x2="360.42" y2="229.94" stroke="red" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="351.89" y1="234.87" x2="333.21" y2="245.65" stroke="black" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+<text x="293.88" y="96.75" fill="blue" font-family="Arial" font-size="18" font-style="normal" font-weight="normal" text-anchor="middle">  N </text>
+<text x="293.88" y="226.60" fill="blue" font-family="Arial" font-size="18" font-style="normal" font-weight="normal" text-anchor="middle">  N </text>
+<text x="281.28" y="226.60" fill="blue" font-family="Arial" font-size="18" font-style="normal" font-weight="normal" text-anchor="middle">  H </text>
+<text x="219.04" y="97.19" fill="blue" font-family="Arial" font-size="18" font-style="normal" font-weight="normal" text-anchor="middle">  N </text>
+<text x="219.04" y="82.79" fill="blue" font-family="Arial" font-size="18" font-style="normal" font-weight="normal" text-anchor="middle">  H </text>
+<text x="181.87" y="162.00" fill="red" font-family="Arial" font-size="18" font-style="normal" font-weight="normal" text-anchor="middle">  O </text>
+<text x="368.59" y="226.60" fill="red" font-family="Arial" font-size="18" font-style="normal" font-weight="normal" text-anchor="middle">  O </text>
+<text x="406.07" y="291.75" fill="#82d700" font-family="Arial" font-size="18" font-style="normal" font-weight="normal" text-anchor="middle">  Cl </text>
+<text x="256.39" y="291.75" fill="#82d700" font-family="Arial" font-size="18" font-style="normal" font-weight="normal" text-anchor="middle">  Cl </text>
+<g id='torsion_area_7d4e0289b4ba4a25818a3e88ad1c32fb' class='oedepict-hover'>
+<circle cx="293.88" cy="199.09" r="5.39" fill="black" stroke="white" stroke-linejoin="round" stroke-linecap="round" />
+<circle cx="293.88" cy="199.09" r="10.78" fill="white" fill-opacity="0.00" />
+</g>
+<g id='torsion_area_08c103ba8fce44a6a372210e55d349c2' class='oedepict-hover'>
+<circle cx="237.75" cy="101.98" r="5.39" fill="black" stroke="white" stroke-linejoin="round" stroke-linecap="round" />
+<circle cx="237.75" cy="101.98" r="10.78" fill="white" fill-opacity="0.00" />
+</g>
+<g id='torsion_area_f7b9f62cd29047c887fb69e72dfa5225' class='oedepict-hover'>
+<circle cx="331.23" cy="263.80" r="5.39" fill="black" stroke="white" stroke-linejoin="round" stroke-linecap="round" />
+<circle cx="331.23" cy="263.80" r="10.78" fill="white" fill-opacity="0.00" />
+</g>
+<g id='torsion_area_a2a24e3a05d94e32b42c6a25c78a44bc' class='oedepict-hover'>
+<circle cx="200.39" cy="102.09" r="5.39" fill="black" stroke="white" stroke-linejoin="round" stroke-linecap="round" />
+<circle cx="200.39" cy="102.09" r="10.78" fill="white" fill-opacity="0.00" />
+</g>
+<g id='torsion_area_5e4cfee1f1274d9191992e83865bc3d6' class='oedepict-hover'>
+<circle cx="312.56" cy="231.45" r="5.39" fill="black" stroke="white" stroke-linejoin="round" stroke-linecap="round" />
+<circle cx="312.56" cy="231.45" r="10.78" fill="white" fill-opacity="0.00" />
+</g>
+<circle cx="768.75" cy="18.75" r="8.33" fill="none" stroke="#b4b4b4" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" />
+<circle cx="768.75" cy="18.75" r="13.33" fill="none" stroke="#b4b4b4" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" />
+<path d="M 772.50 22.50 L 785.00 28.06 L 780.00 30.00 L 778.06 35.00 Z" fill="white" stroke="white" stroke-width="10" stroke-linejoin="round" stroke-linecap="square" />
+<line x1="790.00" y1="40.00" x2="782.50" y2="32.50" stroke="white" stroke-width="10" stroke-linejoin="round" stroke-linecap="square" />
+<path d="M 772.50 22.50 L 785.00 28.06 L 780.00 30.00 L 778.06 35.00 Z" fill="black" stroke="black" stroke-width="5" stroke-linecap="square" />
+<line x1="790.00" y1="40.00" x2="782.50" y2="32.50" stroke="black" stroke-width="5" stroke-linecap="square" />
+<path d="M 10.50 0.50 L 789.50 0.50 C 795.02 0.50 799.50 4.98 799.50 10.50 L 799.50 389.50 C 799.50 395.02 795.02 399.50 789.50 399.50 L 10.50 399.50 C 4.98 399.50 0.50 395.02 0.50 389.50 L 0.50 10.50 C 0.50 4.98 4.98 0.50 10.50 0.50 Z" fill="none" stroke="#bfbfbf" stroke-linejoin="round" stroke-linecap="round" />
+</svg>
